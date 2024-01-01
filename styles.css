@@ -1,0 +1,135 @@
+@font-face {
+    font-family: PremierSans;
+    src: url("./fonts/Premier Sans.otf");
+}
+
+@font-face {
+    font-family: Coolvetica;
+    src: url("./fonts/coolvetica rg.otf");
+}
+
+* {
+    font-family: Coolvetica, Arial, Helvetica, sans-serif;
+}
+
+:root {
+    background-color: #f6f6f6;
+}
+
+body {
+    margin: 0;
+}
+
+ul{
+    display: inline-flex;
+	list-style: none;
+    margin-block-start: 0px;
+    padding-inline-start: 5px;
+}
+
+button{
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color: lightgrey;
+	padding: 10px;
+	margin: 5px;
+	transition: background-color 0.25s;
+}
+button:hover{
+	background-color: grey;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+	color: black;
+}
+
+h1 {
+    font-weight: bold;
+    color: #37003c;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+p {
+}
+
+table {
+    width: 100%;
+    font-size: 18px;
+    font-family: Coolvetica;
+    color: #37003c;
+    background-color: #fff;
+    border: 1px solid #333;
+}
+
+th {
+    padding: 10px;
+    background-color: #fbfafa;
+    font-size: 16px;
+    border-bottom: .1rem solid #ebe5eb
+}
+
+td {
+    font-size: 22px;
+    padding: 10px;
+    text-align: center;
+}
+
+#top h1 {
+    font-size: 62px;
+    text-align: center;
+    font-weight: 400;
+    font-size: 6.1rem;
+    line-height: 7.3rem;
+    margin: 0;
+    text-transform: capitalize;
+    font-family: PremierSans;
+    color: #37003c;
+}
+
+#main {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    justify-content: space-evenly;
+    align-items: flex-start;
+}
+
+#results {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items: center;
+    overflow-y: scroll;
+    height: 500px;
+    align-items: stretch;
+}
+#results h1 {
+    margin: 0;
+    text-align: center;
+}
+
+#main-table {
+    width: 50%;
+}
+#main-table td:nth-child(3) {
+    font-weight: bold;
+}
+
+#main-table tr:nth-child(2) > td:nth-child(1){
+    background-color: gold;
+}
+#main-table tr:nth-child(3) > td:nth-child(1){
+    background-color: lightgray;
+}
+#main-table tr:nth-child(4) > td:nth-child(1){
+    background-color: burlywood;
+}
+
+#match-result tr:nth-child(2) {
+    background-color: #ffd9007a;
+}
