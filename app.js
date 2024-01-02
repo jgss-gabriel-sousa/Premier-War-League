@@ -128,6 +128,7 @@ function ranking(){
                 ranking[p.player1] = {
                     name: p.player1,
                     pts: 0,
+                    max_pts: 0,
                     victories: 0,
                     podiums: 0,
                     x1s: 0,
@@ -141,6 +142,7 @@ function ranking(){
                     ranking[p.player1] = {
                         name: p.player1,
                         pts: 0,
+                        max_pts: 0,
                         victories: 0,
                         podiums: 0,
                         x1s: 0,
@@ -153,6 +155,7 @@ function ranking(){
                     ranking[p.player2] = {
                         name: p.player2,
                         pts: 0,
+                        max_pts: 0,
                         victories: 0,
                         podiums: 0,
                         x1s: 0,
@@ -167,6 +170,7 @@ function ranking(){
                     ranking[p.player2] = {
                         name: p.player2,
                         pts: 0,
+                        max_pts: 0,
                         victories: 0,
                         podiums: 0,
                         x1s: 0,
@@ -179,6 +183,7 @@ function ranking(){
                     ranking[p.player3] = {
                         name: p.player3,
                         pts: 0,
+                        max_pts: 0,
                         victories: 0,
                         podiums: 0,
                         x1s: 0,
@@ -202,6 +207,7 @@ function ranking(){
 
             if(!match.x1 && playersInTeam == 1){
                 ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers);
+                ranking[p.player1].max_pts += pointSystem(1, nmbrOfPlayers);
                 ranking[p.player1].matches++;
                 ranking[p.player1].positionsHistory.push(match.ranking[i].position);
                 ranking[p.player1].colorsHistory.push(match.ranking[i].color);
@@ -209,6 +215,8 @@ function ranking(){
             if(playersInTeam == 2){
                 ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
                 ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player1].max_pts += pointSystem(1, nmbrOfPlayers, playersInTeam);
+                ranking[p.player2].max_pts += pointSystem(1, nmbrOfPlayers, playersInTeam);
                 ranking[p.player1].matches++;
                 ranking[p.player2].matches++;
                 ranking[p.player1].positionsHistory.push(match.ranking[i].position);
@@ -231,6 +239,9 @@ function ranking(){
                 ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
                 ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
                 ranking[p.player3].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player1].max_pts += pointSystem(1, nmbrOfPlayers, playersInTeam);
+                ranking[p.player2].max_pts += pointSystem(1, nmbrOfPlayers, playersInTeam);
+                ranking[p.player3].max_pts += pointSystem(1, nmbrOfPlayers, playersInTeam);
                 ranking[p.player1].matches++;
                 ranking[p.player2].matches++;
                 ranking[p.player3].matches++;
@@ -319,8 +330,8 @@ buttons.forEach(el => {
         const match = matches[el.value];
 
         let html = `
+        <a target="_blank" href="./data/img/matches/${match.img}.webp"><img class="profile-photo" src="./data/img/matches/${match.img}.webp"/></a>
         <p>Vitória por: ${match.victory}</p>
-        <img class="profile-photo" src="./img/matches/${match.img}.webp"/>
         <table id="match-result">
         <tr>
             <th>Pos</th>
@@ -417,7 +428,6 @@ players.forEach(el => {
         meanPosition /= player.matches;
         meanPosition = meanPosition.toFixed(1);
         
-        console.log(player.colorsHistory)
         let meanColorObj = {};
         for(let i = 0; i < player.colorsHistory.length; i++) {
             const color = player.colorsHistory[i];
@@ -454,24 +464,33 @@ players.forEach(el => {
         let html = `
         <img class="profile-photo" src="./img/players/${name}.webp"/>
         <table id="player-stats">
-        <tr>
-            <th>Posição Final Média</th>
-            <th>Win Rate</th>
-            <th>Pódios Rate</th>
-            <th>Cor mais usada</th>
-        </tr>
-        <tr>
-            <td>${meanPosition}º</td>
-            <td>${Math.round((player.victories / player.matches)*100)}%</td>
-            <td>${Math.round((player.podiums / player.matches)*100)}%</td>
-            <td>${meanColor}</td>
-        </tr>
+            <tr>
+                <th>Aproveitamento</th>
+                <th>Posição Final Média</th>
+            </tr>
+            <tr>
+                <td>${Math.round((player.pts / player.max_pts)*100)}%</td>
+                <td>${meanPosition}º</td>
+            </tr>
+                <th>Win Rate</th>
+                <th>Pódios Rate</th>
+            </tr>
+            <tr>
+                <td>${Math.round((player.victories / player.matches)*100)}%</td>
+                <td>${Math.round((player.podiums / player.matches)*100)}%</td>
+            </tr>
+            <tr>
+                <th>Cor mais usada</th>
+            </tr>
+            <tr>
+                <td>${meanColor}</td>
+            </tr>
         `; 
 
         Swal.fire({
             title: name,
             html: html,
-            width: "600px",
+            width: "800px",
             showCloseButton: true,
             showCancelButton: false,
             showConfirmButton: false,

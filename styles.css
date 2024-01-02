@@ -55,6 +55,7 @@ h2 {
 }
 
 p {
+    margin: 10px 0;
 }
 
 table {
@@ -71,7 +72,8 @@ th {
     padding: 10px;
     background-color: #fbfafa;
     font-size: 16px;
-    border-bottom: .1rem solid #ebe5eb
+    border-bottom: .1rem solid #ebe5eb;
+    border-top: 1px solid #333;
 }
 
 td {
@@ -193,6 +195,11 @@ tr:last-child {
     #match-result table{
         overflow-x: scroll;
     }
+    #player-stats th, #player-stats td{
+        font-size: 14px;
+        white-space: nowrap;
+    }
+    
     table {
         width: 100%;
         overflow-x: scroll;

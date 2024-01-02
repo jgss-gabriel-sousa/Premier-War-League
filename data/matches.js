@@ -1,7 +1,7 @@
 export const matches = [
     {
-        date: "28-12-2023",
-        img: "28-12-2023",
+        date: "27-12-2023",
+        img: "27-12-2023",
         victory: "Dominar 24 Territórios",
         location: "Casa de Itonga",
         ranking: [
@@ -33,7 +33,8 @@ export const matches = [
         ],
     },
     {
-        date: "29-12-2023",
+        date: "28-12-2023",
+        img: "28-12-2023",
         victory: "Dominar Ásia e África",
         location: "Casa de Bruno",
         ranking: [
@@ -72,6 +73,7 @@ export const matches = [
     },
     {
         date: "30-12-2023",
+        img: "30-12-2023",
         victory: "W.O.",
         location: "Casa de Bilu",
         ranking: [
@@ -117,6 +119,7 @@ export const matches = [
     },
     {
         date: "30-12-2023",
+        img: "30-12-2023-x1-1",
         victory: "Dominar 24 Territórios",
         location: "Casa de Bilu",
         ranking: [
@@ -137,6 +140,7 @@ export const matches = [
     },
     {
         date: "02-01-2024",
+        img: "02-01-2024-1",
         victory: "Dominar 30 Territórios",
         location: "Casa de Bilu",
         ranking: [
@@ -161,6 +165,7 @@ export const matches = [
     },
     {
         date: "02-01-2024",
+        img: "02-01-2024-2",
         victory: "Dominar África e América do Norte",
         location: "Casa de Bilu",
         ranking: [
