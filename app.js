@@ -2,6 +2,7 @@ import { matches } from "./data/matches.js"
 
 const table = document.querySelector("#main-table");
 const results = document.querySelector("#results");
+let finalRanking = {};
 
 function pointSystem(position, totalOfPlayers, playersInTeam){
     let points;
@@ -23,7 +24,8 @@ function pointSystem(position, totalOfPlayers, playersInTeam){
         points = [2,-2];
     }
 
-    if(playersInTeam){
+    if(playersInTeam > 1){
+        console.log(Math.floor(points[position] / playersInTeam))
         return Math.max((Math.floor(points[position] / playersInTeam)), 1);
     }
 
@@ -33,8 +35,25 @@ function pointSystem(position, totalOfPlayers, playersInTeam){
 function processMatches(){
     matches.forEach(match => {
         const mRank = match.ranking;
-        const nmbrOfPlayers = match.ranking.length;
+        match.numberOfPlayers = match.ranking.length;
         const mNewRank = [];
+        
+        let parseDate = match.date.split("-");
+        let date = new Date(parseDate[2], parseDate[1] - 1, parseDate[0]);
+        match.timestamp = date.getTime();
+        
+        if(match.ranking.length == 2 && match.ranking[0].player2 == undefined && match.ranking[1].player2 == undefined){
+            match.x1 = true;
+        }
+        else if(match.ranking.length == 2 && 
+            match.ranking[0].player2 && !match.ranking[0].player3 && 
+            match.ranking[1].player2 && !match.ranking[1].player3){
+
+            match.numberOfPlayers = 4;
+        }
+        else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){
+            match.numberOfPlayers = 6;
+        }
 
         let positions = 1;
         for(let i = 0; i < mRank.length; i++){
@@ -44,7 +63,7 @@ function processMatches(){
                 p.winner = false;
             else{
                 p.position = 1;
-                match.winner = p.player1 + (p.player2 != undefined ? p.player2 : "") + (p.player3 != undefined ? p.player3 : "");;
+                match.winner = p.player1 + (p.player2 != undefined ? " - "+p.player2 : "") + (p.player3 != undefined ? " - "+p.player3 : "");;
             }
 
             if(i != 0 && p.territories == mRank[i-1].territories && p.troops == mRank[i-1].troops){
@@ -63,17 +82,16 @@ function processMatches(){
 }processMatches();
 
 function lastResults(){
-    matches.sort((a,b) => b.date - a.date);
+    matches.sort((a,b) => b.timestamp - a.timestamp);
 
-    let html = "<h1>Partidas:</h1>";
+    let html = "<h1>Partidas:</h1><div>";
     for (let i = 0; i < matches.length; i++) {
         const match = matches[i];
 
         let title = "";
 
-        if(match.ranking.length == 2 && match.ranking[0].player2 == undefined && match.ranking[1].player2 == undefined){
+        if(match.x1){
             title = `X1 ${match.ranking[0].player1}/${match.ranking[1].player1} (${match.date})`
-            match.x1 = true;
         }
         else{
             title = `${match.location} (${match.date})`
@@ -89,6 +107,7 @@ function lastResults(){
         `;
         
     }
+    html += "</div>"
     results.innerHTML = html;
 }
 
@@ -97,7 +116,7 @@ function ranking(){
 
     matches.forEach(match => {
         const mRank = match.ranking;
-        const nmbrOfPlayers = match.ranking.length;
+        let nmbrOfPlayers = match.numberOfPlayers;
 
         for(let i = 0; i < mRank.length; i++){
             const p = mRank[i];
@@ -117,24 +136,48 @@ function ranking(){
                 };
             }
             if(playersInTeam == 2 && !ranking.hasOwnProperty(p.player2)){
-                ranking[p.player2] = {
-                    name: p.player2,
-                    pts: 0,
-                    victories: 0,
-                    podiums: 0,
-                    matches: 0,
-                    x1s: 0,
-                };
+                if(!ranking.hasOwnProperty(p.player1)){
+                    ranking[p.player1] = {
+                        name: p.player1,
+                        pts: 0,
+                        victories: 0,
+                        podiums: 0,
+                        x1s: 0,
+                        matches: 0,
+                    };
+                }
+                if(!ranking.hasOwnProperty(p.player2)){
+                    ranking[p.player2] = {
+                        name: p.player2,
+                        pts: 0,
+                        victories: 0,
+                        podiums: 0,
+                        x1s: 0,
+                        matches: 0,
+                    };
+                }
             }
-            if(playersInTeam == 3 && !ranking.hasOwnProperty(p.player3)){
-                ranking[p.player3] = {
-                    name: p.player3,
-                    pts: 0,
-                    victories: 0,
-                    podiums: 0,
-                    x1s: 0,
-                    matches: 0,
-                };
+            if(playersInTeam == 3){
+                if(!ranking.hasOwnProperty(p.player2)){
+                    ranking[p.player2] = {
+                        name: p.player2,
+                        pts: 0,
+                        victories: 0,
+                        podiums: 0,
+                        x1s: 0,
+                        matches: 0,
+                    };
+                }
+                if(!ranking.hasOwnProperty(p.player3)){
+                    ranking[p.player3] = {
+                        name: p.player3,
+                        pts: 0,
+                        victories: 0,
+                        podiums: 0,
+                        x1s: 0,
+                        matches: 0,
+                    };
+                }
             }
 
             if(match.x1){
@@ -154,19 +197,28 @@ function ranking(){
                 ranking[p.player1].matches++;
             }
             if(playersInTeam == 2){
-                ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, 2);
-                ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, 2);
+                ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player1].matches++;
                 ranking[p.player2].matches++;
             }
             if(playersInTeam == 3){
-                ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, 3);
-                ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, 3);
-                ranking[p.player3].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, 3);
+                ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player3].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
+                ranking[p.player1].matches++;
+                ranking[p.player2].matches++;
                 ranking[p.player3].matches++;
             }
-
-            if(i == 0) ranking[p.player1].victories++;
-            if(i <= 2) ranking[p.player1].podiums++;
+            
+            if(match.ranking[i].position == 1 && !match.x1){
+                ranking[p.player1].victories++;
+                if(p.player2)
+                    ranking[p.player2].victories++;
+                if(p.player3)
+                    ranking[p.player3].victories++;
+            }
+            if(i <= 2 && !match.x1) ranking[p.player1].podiums++;
         }
     });
 
@@ -184,7 +236,6 @@ function ranking(){
         <th>Vitórias</th>
         <th>Pódios</th>
         <th>Partidas</th>
-        <th>X1s</th>
     </tr>
     `;
 
@@ -194,18 +245,23 @@ function ranking(){
         let pos = i+1;
 
         html += `
-        <tr>
+        <tr id="${e[0]}">
             <td>${i+1}º</td>
             <td>${e[0]}</td>
             <td>${e[1].pts}</td>
             <td>${e[1].victories}</td>
             <td>${e[1].podiums}</td>
             <td>${e[1].matches}</td>
-            <td>${e[1].x1s}</td>
         </tr>
         `;
     }
     table.innerHTML = html;
+    
+    for(let i = 0; i < ranking.length; i++){
+        const e = ranking[i];
+        
+        finalRanking[e[0]] = e[1];
+    }
 }
 
 
@@ -219,6 +275,7 @@ buttons.forEach(el => {
 
         let html = `
         <p>Vitória por: ${match.victory}</p>
+        <img class="profile-photo" src="./img/matches/${match.img}.webp"/>
         <table id="match-result">
         <tr>
             <th>Pos</th>
@@ -243,9 +300,11 @@ buttons.forEach(el => {
 
             for(let p = 0; p < playersInSameTeam; p++) {
                 if(p > 0){
-                    html += `
-                    <tr>
-                        <td></td>`
+                    html += `<tr`
+                    if(e.position == 1){
+                        html += ` class="match-result-winner" `;
+                    }
+                    html += `><td></td>`
                         
                     if(p == 1)
                         html += `<td>${e.player2}</td>`
@@ -254,18 +313,23 @@ buttons.forEach(el => {
                     
                         
                     html += `
-                        <td>${pointSystem(e.position, match.ranking.length, playersInSameTeam)}</td>
+                        <td>${pointSystem(e.position, match.numberOfPlayers, playersInSameTeam)}</td>
                         <td></td>
                         <td></td>
                     </tr>
                     `;
                 }
                 else{
+                    html += `<tr`
+                    if(e.position == 1){
+                        html += ` class="match-result-winner" `;
+                    }
+
                     html += `
-                    <tr>
+                    >
                         <td>${e.position}º</td>
                         <td>${e.player1}</td>
-                        <td>${pointSystem(e.position, match.ranking.length, playersInSameTeam)}</td>
+                        <td>${pointSystem(e.position, match.numberOfPlayers, playersInSameTeam)}</td>
                         <td>${e.territories}</td>
                         <td>${e.troops}</td>
                     </tr>
@@ -277,6 +341,41 @@ buttons.forEach(el => {
 
         Swal.fire({
             title: match.title,
+            html: html,
+            showCloseButton: true,
+            showCancelButton: false,
+            showConfirmButton: false,
+            focusConfirm: false,
+        });
+    });
+});
+
+const players = document.querySelectorAll("table tr:nth-child(n+2)");
+players.forEach(el => {
+    el.addEventListener("click", e => {
+        const name = el.id;
+        const player = finalRanking[name];
+        console.log(player)
+
+        let html = `
+        <img class="profile-photo" src="./img/players/${name}.webp"/>
+        <table id="player-stats">
+        <tr>
+            <th>Posição Final Média</th>
+            <th>Win Rate</th>
+            <th>Pódios Rate</th>
+            <th>Cor mais usada</th>
+        </tr>
+        <tr>
+            <td>-</td>
+            <td>${Math.round((player.victories / player.matches)*100)}%</td>
+            <td>${Math.round((player.podiums / player.matches)*100)}%</td>
+            <td>-</td>
+        </tr>
+        `; 
+
+        Swal.fire({
+            title: name,
             html: html,
             showCloseButton: true,
             showCancelButton: false,

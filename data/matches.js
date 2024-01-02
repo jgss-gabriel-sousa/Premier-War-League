@@ -1,6 +1,7 @@
 export const matches = [
     {
         date: "28-12-2023",
+        img: "28-12-2023",
         victory: "Dominar 24 Territórios",
         location: "Casa de Itonga",
         ranking: [
@@ -20,7 +21,7 @@ export const matches = [
             {
                 player1: "Itonga",
                 color: "Verdes",
-                territories: 6,
+                territories: 7,
                 troops: 7,
             },
             {
@@ -122,16 +123,78 @@ export const matches = [
         ranking: [
             {
                 player1: "Ravena",
-                color: "Verdes",
-                territories: 16,
-                troops: 58,
+                color: "Azuis",
+                territories: 24,
+                troops: 41,
                 winner: true,
             },
             {
                 player1: "Bilu",
+                color: "Brancas",
+                territories: 18,
+                troops: 34,
+            },
+        ],
+    },
+    {
+        date: "02-01-2024",
+        victory: "Dominar 30 Territórios",
+        location: "Casa de Bilu",
+        ranking: [
+            {
+                player1: "Coxinha",
+                player2: "Itonga",
+                player3: "Bruno",
+                color: "Vermelhas-Brancas-Pretas",
+                territories: 30,
+                troops: 59,
+                winner: true,
+            },
+            {
+                player1: "Bilu",
+                player2: "Divinha",
+                player3: "Luiz",
+                color: "Verdes-Amarelas-Azuis",
+                territories: 12,
+                troops: 25,
+            },
+        ],
+    },
+    {
+        date: "02-01-2024",
+        victory: "África e América do Norte",
+        location: "Casa de Bilu",
+        ranking: [
+            {
+                player1: "Bruno",
+                color: "Azuis",
+                territories: 29,
+                troops: 56,
+                winner: true,
+            },
+            {
+                player1: "Luiz",
+                color: "Verdes",
+                territories: 8,
+                troops: 16,
+            },
+            {
+                player1: "Itonga",
+                color: "Pretas",
+                territories: 3,
+                troops: 3,
+            },
+            {
+                player1: "Bilu",
+                color: "Amarelas",
+                territories: 2,
+                troops: 2,
+            },
+            {
+                player1: "Coxinha",
                 color: "Vermelhas",
-                territories: 10,
-                troops: 35,
+                territories: 0,
+                troops: 0,
             },
         ],
     },

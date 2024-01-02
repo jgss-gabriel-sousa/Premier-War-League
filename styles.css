@@ -64,6 +64,7 @@ table {
     color: #37003c;
     background-color: #fff;
     border: 1px solid #333;
+    border-collapse: collapse;
 }
 
 th {
@@ -78,9 +79,28 @@ td {
     padding: 10px;
     text-align: center;
 }
+td:first-child, th:first-child {
+    border-left: 1px solid #333;
+}
+td:last-child, th:last-child {
+    border-right: 1px solid #333;
+}
+
+th {
+    border-bottom: .1rem solid #333;
+}
+tr {
+    border-bottom: .1rem solid #ebe5eb;
+}
+#main-table tr:nth-child(n+2):hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+tr:last-child {
+    border: 0;
+}
 
 #top h1 {
-    font-size: 62px;
     text-align: center;
     font-weight: 400;
     font-size: 6.1rem;
@@ -100,17 +120,18 @@ td {
 }
 
 #results {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
     align-items: center;
-    overflow-y: scroll;
-    height: 500px;
-    align-items: stretch;
 }
 #results h1 {
     margin: 0;
     text-align: center;
+}
+#results div {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    align-items: stretch;
 }
 
 #main-table {
@@ -118,6 +139,7 @@ td {
 }
 #main-table td:nth-child(3) {
     font-weight: bold;
+    letter-spacing: 2px;
 }
 
 #main-table tr:nth-child(2) > td:nth-child(1){
@@ -130,6 +152,44 @@ td {
     background-color: burlywood;
 }
 
-#match-result tr:nth-child(2) {
+.match-result-winner {
     background-color: #ffd9007a;
+}
+
+.profile-photo {
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+    #top h1 {
+        font-size: 3rem;
+        line-height: 4rem;
+    }
+    #main {
+        padding: 0;
+        flex-direction: column;
+        align-items: center;
+    }
+    #main-table {
+        padding: 0;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: scroll;
+    }
+    #results {
+        margin-top: 10px;
+    }
+    table {
+        width: 100%;
+        overflow-x: scroll;
+    }
+    td {
+        font-size: 16px;
+        padding: 10px 0px;
+        text-align: center;
+    }
+    th {
+        padding: 10px 2px;
+    }
 }
