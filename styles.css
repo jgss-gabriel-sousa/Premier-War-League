@@ -152,6 +152,12 @@ tr:last-child {
     background-color: burlywood;
 }
 
+#match-result {
+    min-width: 60%
+}
+#match-result td, #match-result th {
+    white-space: nowrap;
+}
 .match-result-winner {
     background-color: #ffd9007a;
 }
@@ -179,6 +185,13 @@ tr:last-child {
     }
     #results {
         margin-top: 10px;
+    }
+    #match-result td, #match-result th {
+        font-size: 14px;
+        white-space: nowrap;
+    }
+    #match-result table{
+        overflow-x: scroll;
     }
     table {
         width: 100%;

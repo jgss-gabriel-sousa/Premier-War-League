@@ -161,7 +161,7 @@ export const matches = [
     },
     {
         date: "02-01-2024",
-        victory: "África e América do Norte",
+        victory: "Dominar África e América do Norte",
         location: "Casa de Bilu",
         ranking: [
             {

@@ -25,7 +25,6 @@ function pointSystem(position, totalOfPlayers, playersInTeam){
     }
 
     if(playersInTeam > 1){
-        console.log(Math.floor(points[position] / playersInTeam))
         return Math.max((Math.floor(points[position] / playersInTeam)), 1);
     }
 
@@ -131,8 +130,10 @@ function ranking(){
                     pts: 0,
                     victories: 0,
                     podiums: 0,
-                    matches: 0,
                     x1s: 0,
+                    matches: 0,
+                    positionsHistory: [],
+                    colorsHistory: [],
                 };
             }
             if(playersInTeam == 2 && !ranking.hasOwnProperty(p.player2)){
@@ -144,6 +145,8 @@ function ranking(){
                         podiums: 0,
                         x1s: 0,
                         matches: 0,
+                        positionsHistory: [],
+                        colorsHistory: [],
                     };
                 }
                 if(!ranking.hasOwnProperty(p.player2)){
@@ -154,6 +157,8 @@ function ranking(){
                         podiums: 0,
                         x1s: 0,
                         matches: 0,
+                        positionsHistory: [],
+                        colorsHistory: [],
                     };
                 }
             }
@@ -166,6 +171,8 @@ function ranking(){
                         podiums: 0,
                         x1s: 0,
                         matches: 0,
+                        positionsHistory: [],
+                        colorsHistory: [],
                     };
                 }
                 if(!ranking.hasOwnProperty(p.player3)){
@@ -176,6 +183,8 @@ function ranking(){
                         podiums: 0,
                         x1s: 0,
                         matches: 0,
+                        positionsHistory: [],
+                        colorsHistory: [],
                     };
                 }
             }
@@ -194,12 +203,29 @@ function ranking(){
             if(!match.x1 && playersInTeam == 1){
                 ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers);
                 ranking[p.player1].matches++;
+                ranking[p.player1].positionsHistory.push(match.ranking[i].position);
+                ranking[p.player1].colorsHistory.push(match.ranking[i].color);
             }
             if(playersInTeam == 2){
                 ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
                 ranking[p.player2].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
                 ranking[p.player1].matches++;
                 ranking[p.player2].matches++;
+                ranking[p.player1].positionsHistory.push(match.ranking[i].position);
+                ranking[p.player2].positionsHistory.push(match.ranking[i].position);
+                
+                let colorP1;
+                let colorP2;
+                if(match.ranking[i].color.includes("-")){
+                    colorP1 = match.ranking[i].color.split("-")[0];
+                    colorP2 = match.ranking[i].color.split("-")[1];
+                }
+                else{
+                    colorP1 = match.ranking[i].color;
+                    colorP2 = match.ranking[i].color;
+                }
+                ranking[p.player1].colorsHistory.push(colorP1);
+                ranking[p.player2].colorsHistory.push(colorP2);
             }
             if(playersInTeam == 3){
                 ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers, playersInTeam);
@@ -208,6 +234,26 @@ function ranking(){
                 ranking[p.player1].matches++;
                 ranking[p.player2].matches++;
                 ranking[p.player3].matches++;
+                ranking[p.player1].positionsHistory.push(match.ranking[i].position);
+                ranking[p.player2].positionsHistory.push(match.ranking[i].position);
+                ranking[p.player3].positionsHistory.push(match.ranking[i].position);
+                
+                let colorP1;
+                let colorP2;
+                let colorP3;
+                if(match.ranking[i].color.includes("-")){
+                    colorP1 = match.ranking[i].color.split("-")[0];
+                    colorP2 = match.ranking[i].color.split("-")[1];
+                    colorP3 = match.ranking[i].color.split("-")[2];
+                }
+                else{
+                    colorP1 = match.ranking[i].color;
+                    colorP2 = match.ranking[i].color;
+                    colorP3 = match.ranking[i].color;
+                }
+                ranking[p.player1].colorsHistory.push(colorP1);
+                ranking[p.player2].colorsHistory.push(colorP2);
+                ranking[p.player3].colorsHistory.push(colorP3);
             }
             
             if(match.ranking[i].position == 1 && !match.x1){
@@ -279,6 +325,7 @@ buttons.forEach(el => {
         <tr>
             <th>Pos</th>
             <th>Jogador</th>
+            <th>Cor</th>
             <th>Pontos</th>
             <th>Territórios</th>
             <th>Tropas</th>
@@ -295,8 +342,6 @@ buttons.forEach(el => {
             if(e.player2) playersInSameTeam = 2;
             if(e.player3) playersInSameTeam = 3;
 
-            console.log(e)
-
             for(let p = 0; p < playersInSameTeam; p++) {
                 if(p > 0){
                     html += `<tr`
@@ -310,8 +355,16 @@ buttons.forEach(el => {
                     if(p == 2)
                         html += `<td>${e.player3}</td>`
                     
-                        
+                    let color;
+                    if(!e.color.split("-")[p]){
+                        color = e.color.split("-")[0];
+                    }
+                    else{
+                        color = e.color.split("-")[p];
+                    }
+
                     html += `
+                        <td>${color}</td>
                         <td>${pointSystem(e.position, match.numberOfPlayers, playersInSameTeam)}</td>
                         <td></td>
                         <td></td>
@@ -328,6 +381,7 @@ buttons.forEach(el => {
                     >
                         <td>${e.position}º</td>
                         <td>${e.player1}</td>
+                        <td>${e.color.split("-")[0]}</td>
                         <td>${pointSystem(e.position, match.numberOfPlayers, playersInSameTeam)}</td>
                         <td>${e.territories}</td>
                         <td>${e.troops}</td>
@@ -341,6 +395,7 @@ buttons.forEach(el => {
         Swal.fire({
             title: match.title,
             html: html,
+            width: "600px",
             showCloseButton: true,
             showCancelButton: false,
             showConfirmButton: false,
@@ -354,7 +409,47 @@ players.forEach(el => {
     el.addEventListener("click", e => {
         const name = el.id;
         const player = finalRanking[name];
-        console.log(player)
+
+        let meanPosition = 0;
+        for(let i = 0; i < player.positionsHistory.length; i++) {
+            meanPosition += player.positionsHistory[i];
+        }
+        meanPosition /= player.matches;
+        meanPosition = meanPosition.toFixed(1);
+        
+        console.log(player.colorsHistory)
+        let meanColorObj = {};
+        for(let i = 0; i < player.colorsHistory.length; i++) {
+            const color = player.colorsHistory[i];
+
+            if(meanColorObj.hasOwnProperty(color)){
+                meanColorObj[color] = meanColorObj[color]+1;
+            }
+            else{
+                meanColorObj[color] = 1;
+            }
+        }
+        let meanColor;
+        let meanColorMax = 0;
+        let draw = 0;
+        for(const c in meanColorObj) {
+            if(meanColorObj[c] > meanColorMax){
+                meanColorMax = meanColorObj[c];
+                meanColor = c;
+                draw = 0;
+            }
+            else if(meanColorObj[c] == meanColorMax){
+                meanColor += "/"+c;
+                draw++;
+            }
+
+            if(draw > 2){
+                meanColor = "*";
+            }
+        }
+        if(draw <= 2){
+            meanColor += " ("+meanColorMax+"x)";
+        }
 
         let html = `
         <img class="profile-photo" src="./img/players/${name}.webp"/>
@@ -366,16 +461,17 @@ players.forEach(el => {
             <th>Cor mais usada</th>
         </tr>
         <tr>
-            <td>-</td>
+            <td>${meanPosition}º</td>
             <td>${Math.round((player.victories / player.matches)*100)}%</td>
             <td>${Math.round((player.podiums / player.matches)*100)}%</td>
-            <td>-</td>
+            <td>${meanColor}</td>
         </tr>
         `; 
 
         Swal.fire({
             title: name,
             html: html,
+            width: "600px",
             showCloseButton: true,
             showCancelButton: false,
             showConfirmButton: false,
