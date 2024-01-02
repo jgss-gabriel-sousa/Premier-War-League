@@ -188,7 +188,6 @@ function ranking(){
                     ranking[p.player1].pts += pointSystem(match.ranking[i].position, nmbrOfPlayers);
                 }
 
-                ranking[p.player1].matches++;
                 ranking[p.player1].x1s++;
             }
 

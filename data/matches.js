@@ -96,8 +96,7 @@ export const matches = [
             },
             {
                 player1: "Luiz",
-                player2: "Bruno",
-                player3: "Ravena",
+                player2: "Ravena",
                 color: "Azuis",
                 territories: 4,
                 troops: 15,
