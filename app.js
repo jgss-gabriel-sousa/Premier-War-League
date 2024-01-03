@@ -472,8 +472,8 @@ players.forEach(el => {
                 <td>${Math.round((player.pts / player.max_pts)*100)}%</td>
                 <td>${meanPosition}º</td>
             </tr>
-                <th>Win Rate</th>
-                <th>Pódios Rate</th>
+                <th>Vitórias</th>
+                <th>Pódios</th>
             </tr>
             <tr>
                 <td>${Math.round((player.victories / player.matches)*100)}%</td>
