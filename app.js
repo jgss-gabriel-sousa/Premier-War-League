@@ -462,7 +462,7 @@ players.forEach(el => {
         }
 
         let html = `
-        <img class="profile-photo" src="./img/players/${name}.webp"/>
+        <img class="profile-photo" src="./data/img/players/${name}.webp"/>
         <table id="player-stats">
             <tr>
                 <th>Aproveitamento</th>

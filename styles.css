@@ -165,7 +165,8 @@ tr:last-child {
 }
 
 .profile-photo {
-    max-width: 300px;
+    max-width: 200px;
+    max-height: 200px;
     margin-bottom: 10px;
 }
 
