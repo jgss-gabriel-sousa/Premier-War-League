@@ -41,16 +41,21 @@ function processMatches(){
         let date = new Date(parseDate[2], parseDate[1] - 1, parseDate[0]);
         match.timestamp = date.getTime();
         
+        /*
         if(match.ranking.length == 2 && match.ranking[0].player2 == undefined && match.ranking[1].player2 == undefined){
             match.x1 = true;
         }
-        else if(match.ranking.length == 2 && 
+        */
+        if(match.ranking.length == 2 && 
             match.ranking[0].player2 && !match.ranking[0].player3 && 
-            match.ranking[1].player2 && !match.ranking[1].player3){
+            match.ranking[1].player2 && !match.ranking[1].player3){ //2 Duplas
 
             match.numberOfPlayers = 4;
         }
-        else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){
+        else if(match.ranking.length == 3 && !match.ranking[0].player3 && !match.ranking[1].player3){ //3 Duplas
+            match.numberOfPlayers = 6;
+        }
+        else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){ //2 Trios
             match.numberOfPlayers = 6;
         }
 
@@ -269,12 +274,15 @@ function ranking(){
             
             if(match.ranking[i].position == 1 && !match.x1){
                 ranking[p.player1].victories++;
-                if(p.player2)
-                    ranking[p.player2].victories++;
-                if(p.player3)
-                    ranking[p.player3].victories++;
+                if(playersInTeam == 2) ranking[p.player2].victories++;
+                if(playersInTeam == 3) ranking[p.player3].victories++;
             }
-            if(i <= 2 && !match.x1) ranking[p.player1].podiums++;
+
+            if(match.ranking[i].position <= 3 && !match.x1){
+                ranking[p.player1].podiums++;
+                if(playersInTeam == 2) ranking[p.player2].podiums++;
+                if(playersInTeam == 3) ranking[p.player3].podiums++;
+            }
         }
     });
 

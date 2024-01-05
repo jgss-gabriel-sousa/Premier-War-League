@@ -117,6 +117,7 @@ export const matches = [
             },
         ],
     },
+    /*
     {
         date: "30-12-2023",
         img: "30-12-2023-x1-1",
@@ -137,7 +138,7 @@ export const matches = [
                 troops: 34,
             },
         ],
-    },
+    },*/
     {
         date: "02-01-2024",
         img: "02-01-2024-1",
@@ -199,6 +200,38 @@ export const matches = [
                 color: "Vermelhas",
                 territories: 0,
                 troops: 0,
+            },
+        ],
+    },
+    {
+        date: "04-01-2024",
+        img: "04-01-2024",
+        victory: "W.O.",
+        location: "Casa de Itonga",
+        ranking: [
+            {
+                player1: "Bilu",
+                player2: "Ravena",
+                color: "Azuis-Vermelhas",
+                territories: 21,
+                troops: 98,
+                winner: true,
+            },
+            {
+                player1: "Luiz",
+                player2: "Iasmin",
+                color: "Verdes-Amarelas",
+                territories: 10,
+                troops: 66,
+                winner: true,
+            },
+            {
+                player1: "Itonga",
+                player2: "Coxinha",
+                color: "Brancas-Pretas",
+                territories: 10,
+                troops: 39,
+                winner: true,
             },
         ],
     },
