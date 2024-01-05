@@ -395,8 +395,16 @@ function ranking(){
         const e = finalRanking[player];
 
         html += `
-        <tr id="${e.name}">
-            <td>${e.position}º</td>
+        <tr id="${e.name}">`
+        
+        html += "<td "
+        if(e.position == 1) html += `class="gold-medal">`
+        else if(e.position == 2) html += `class="silver-medal">`
+        else if(e.position == 3) html += `class="bronze-medal">`
+        else html += `>`
+        
+        html += `
+            ${e.position}º</td>
             <td>${e.name}</td>
             <td>${e.pts}</td>
             <td>${e.victories}</td>
