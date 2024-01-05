@@ -163,6 +163,9 @@ tr:last-child {
     background-color: #ffd9007a;
 }
 
+#player-stats th {
+    border: .1rem solid #333;
+}
 .profile-photo {
     max-width: 200px;
     max-height: 200px;
