@@ -51,12 +51,15 @@ function processMatches(){
             match.ranking[1].player2 && !match.ranking[1].player3){ //2 Duplas
 
             match.numberOfPlayers = 4;
+            match.inTeam = true;
         }
         else if(match.ranking.length == 3 && !match.ranking[0].player3 && !match.ranking[1].player3){ //3 Duplas
             match.numberOfPlayers = 6;
+            match.inTeam = true;
         }
         else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){ //2 Trios
             match.numberOfPlayers = 6;
+            match.inTeam = true;
         }
 
         let positions = 1;
@@ -274,23 +277,108 @@ function ranking(){
             
             if(match.ranking[i].position == 1 && !match.x1){
                 ranking[p.player1].victories++;
+
                 if(playersInTeam == 2) ranking[p.player2].victories++;
-                if(playersInTeam == 3) ranking[p.player3].victories++;
+                if(playersInTeam == 3){
+                    ranking[p.player2].victories++;
+                    ranking[p.player3].victories++;
+                }
             }
 
-            if(match.ranking[i].position <= 3 && !match.x1){
+            if(match.ranking[i].position <= 3 && !match.x1 && !match.inTeam){
                 ranking[p.player1].podiums++;
                 if(playersInTeam == 2) ranking[p.player2].podiums++;
-                if(playersInTeam == 3) ranking[p.player3].podiums++;
+                if(playersInTeam == 3){
+                    ranking[p.player2].podiums++;
+                    ranking[p.player3].podiums++;
+                }
             }
         }
     });
+
+
+    function generateRanking(data) {
+        // Converte o objeto em um array de pares chave-valor
+        const playerEntries = Object.entries(data);
+    
+        // Ordena os jogadores com base nos pontos, vitórias e pódios
+        playerEntries.sort((a, b) => {
+            const pointsComparison = b[1].pts - a[1].pts;
+            if (pointsComparison !== 0) {
+                return pointsComparison;
+            }
+    
+            const victoriesComparison = b[1].victories - a[1].victories;
+            if (victoriesComparison !== 0) {
+                return victoriesComparison;
+            }
+    
+            const podiumsComparison = b[1].podiums - a[1].podiums;
+            if (podiumsComparison !== 0) {
+                return podiumsComparison;
+            }
+    
+            const matchesComparison = b[1].matches - a[1].matches;
+            if (matchesComparison !== 0) {
+                return matchesComparison;
+            }
+    
+            // Se tudo mais falhar, use a ordem original
+            return 0;
+        });
+    
+        // Cria um objeto para armazenar as posições finais
+        const newRank = {};
+        let currentPosition = 1;
+    
+
+        // Preenche o objeto de ranking com base na ordem ordenada
+        for (let i = 0; i < playerEntries.length; i++) {
+            const [player, details] = playerEntries[i];
+    
+            if (i > 0 && (
+                details.pts !== playerEntries[i - 1][1].pts ||
+                details.victories !== playerEntries[i - 1][1].victories ||
+                details.podiums !== playerEntries[i - 1][1].podiums ||
+                details.matches !== playerEntries[i - 1][1].matches
+                )) {
+                currentPosition = i + 1;
+            }
+
+            console.log(player+"-"+currentPosition)
+
+            newRank[player] = { 
+                name: player, 
+                position: currentPosition, 
+                pts: details.pts, 
+                victories: details.victories, 
+                podiums: details.podiums,
+                matches: details.matches,
+            };
+
+            ranking[player].finalPosition = currentPosition;
+        }
+    
+        return newRank;
+    }
+    finalRanking = generateRanking(ranking);
+
+    /*
+    // Imprime o resultado do ranking
+    for (const player in rankingResult) {
+        console.log(`${rankingResult[player].position} - ${player}: ${rankingResult[player].points} pontos`);
+    }
+
+    console.log(rankingResult)
+    
+
 
     ranking = Object.entries(ranking);
     ranking.sort((a,b) => b[1].matches - a[1].matches);
     ranking.sort((a,b) => b[1].podiums - a[1].podiums);
     ranking.sort((a,b) => b[1].victories - a[1].victories);
-    ranking.sort((a,b) => b[1].pts - a[1].pts);
+    ranking.sort((a,b) => b[1].pts - a[1].pts);*/
+
 
     let html = `
     <tr>
@@ -303,27 +391,25 @@ function ranking(){
     </tr>
     `;
 
-    for (let i = 0; i < ranking.length; i++) {
-        const e = ranking[i];
-
-        let pos = i+1;
+    for (const player in finalRanking) {
+        const e = finalRanking[player];
 
         html += `
-        <tr id="${e[0]}">
-            <td>${i+1}º</td>
-            <td>${e[0]}</td>
-            <td>${e[1].pts}</td>
-            <td>${e[1].victories}</td>
-            <td>${e[1].podiums}</td>
-            <td>${e[1].matches}</td>
+        <tr id="${e.name}">
+            <td>${e.position}º</td>
+            <td>${e.name}</td>
+            <td>${e.pts}</td>
+            <td>${e.victories}</td>
+            <td>${e.podiums}</td>
+            <td>${e.matches}</td>
         </tr>
         `;
     }
     table.innerHTML = html;
-    
-    for(let i = 0; i < ranking.length; i++){
-        const e = ranking[i];
-        
+
+    finalRanking = Object.entries(ranking);
+    for(let i = 0; i < finalRanking.length; i++){
+        const e = finalRanking[i];
         finalRanking[e[0]] = e[1];
     }
 }
