@@ -20,6 +20,10 @@ body {
     margin: 0;
 }
 
+section {
+    text-align: center;
+}
+
 ul{
     display: inline-flex;
 	list-style: none;
@@ -34,6 +38,7 @@ button{
 	padding: 10px;
 	margin: 5px;
 	transition: background-color 0.25s;
+    font-size: 16px;
 }
 button:hover{
 	background-color: grey;
@@ -55,6 +60,7 @@ h2 {
 }
 
 p {
+    font-size: 14px;
     margin: 10px 0;
 }
 

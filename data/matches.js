@@ -117,7 +117,6 @@ export const matches = [
             },
         ],
     },
-    /*
     {
         date: "30-12-2023",
         img: "30-12-2023-x1-1",
@@ -138,7 +137,7 @@ export const matches = [
                 troops: 34,
             },
         ],
-    },*/
+    },
     {
         date: "02-01-2024",
         img: "02-01-2024-1",
@@ -200,6 +199,28 @@ export const matches = [
                 color: "Vermelhas",
                 territories: 0,
                 troops: 0,
+            },
+        ],
+    },
+    {
+        date: "03-01-2024",
+        img: "03-01-2024-x1",
+        victory: "Dominar 24 Territórios",
+        location: "Casa de Itonga",
+        x1: true,
+        ranking: [
+            {
+                player1: "Itonga",
+                color: "Pretas",
+                territories: 38,
+                troops: 56,
+                winner: true,
+            },
+            {
+                player1: "Renally",
+                color: "Brancas",
+                territories: 4,
+                troops: 18,
             },
         ],
     },
