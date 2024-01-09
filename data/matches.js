@@ -254,4 +254,37 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "08-01-2024",
+        img: "08-01-2024",
+        victory: "Dominar Europa, América do Sul e mais outro Continente",
+        location: "Casa do Coxas",
+        ranking: [
+            {
+                player1: "Coxinha",
+                color: "Pretas",
+                territories: 18,
+                troops: 60,
+                winner: true,
+            },
+            {
+                player1: "Ravena",
+                color: "Vermelhas",
+                territories: 15,
+                troops: 30,
+            },
+            {
+                player1: "Bilu",
+                color: "Amarelas",
+                territories: 9,
+                troops: 35,
+            },
+            {
+                player1: "Bruno",
+                color: "Azuis",
+                territories: 0,
+                troops: 0,
+            },
+        ],
+    },
 ]
