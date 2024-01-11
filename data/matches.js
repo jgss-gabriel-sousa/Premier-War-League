@@ -287,4 +287,26 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "10-01-2024",
+        img: "10-01-2024-x1",
+        victory: "Dominar Ásia e América do Sul",
+        location: "Casa de Bilu",
+        x1: true,
+        ranking: [
+            {
+                player1: "Ravena",
+                color: "Pretas",
+                territories: 30,
+                troops: 77,
+                winner: true,
+            },
+            {
+                player1: "Bilu",
+                color: "Brancas",
+                territories: 12,
+                troops: 19,
+            },
+        ],
+    },
 ]
