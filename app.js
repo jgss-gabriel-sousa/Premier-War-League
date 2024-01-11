@@ -29,6 +29,8 @@ changeTable.addEventListener("click", e => {
         drawRanking(finalRanking);
         changeTable.innerText = "Tabela de X1"
     }
+
+    lastResults();
 });
 
 const buttons = document.querySelectorAll("#results button");

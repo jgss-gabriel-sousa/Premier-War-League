@@ -5,9 +5,16 @@ const results = document.querySelector("#results");
 export function lastResults(){
     matches.sort((a,b) => b.timestamp - a.timestamp);
 
+    const filter = document.querySelector("#change-table").innerText;
+
     let html = "<h1>Partidas:</h1><div>";
     for (let i = 0; i < matches.length; i++) {
         const match = matches[i];
+
+        if(filter == "Tabela Padrão" && !match.x1)
+        continue;
+        if(filter == "Tabela de X1" && match.x1)
+            continue;
 
         let title = "";
 
