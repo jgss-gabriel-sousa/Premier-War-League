@@ -49,11 +49,11 @@ export function profiles(ranking){
             <img class="profile-photo" src="./data/img/players/${name}.webp"/>
             <table id="player-stats">
                 <tr>
-                    <th>Aproveitamento</th>
+                    <th>Pontos Totais</th>
                     <th>Posição Final Média</th>
                 </tr>
                 <tr>
-                    <td>${Math.round((player.pts / player.max_pts)*100)}%</td>
+                    <td>${player.pts}</td>
                     <td>${meanPosition}º</td>
                 </tr>
                     <th>Vitórias</th>

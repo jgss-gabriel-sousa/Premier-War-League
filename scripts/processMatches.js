@@ -17,18 +17,21 @@ export function processMatches(){
         }
         if(match.ranking.length == 2 && 
             match.ranking[0].player2 && !match.ranking[0].player3 && 
-            match.ranking[1].player2 && !match.ranking[1].player3){ //2 Duplas
+            match.ranking[1].player2 && !match.ranking[1].player3){
 
             match.numberOfPlayers = 4;
             match.inTeam = true;
+            match.inTeamType = "2 Duplas";
         }
-        else if(match.ranking.length == 3 && !match.ranking[0].player3 && !match.ranking[1].player3){ //3 Duplas
+        else if(match.ranking.length == 3 && !match.ranking[0].player3 && !match.ranking[1].player3){
             match.numberOfPlayers = 6;
             match.inTeam = true;
+            match.inTeamType = "3 Duplas";
         }
-        else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){ //2 Trios
+        else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){
             match.numberOfPlayers = 6;
             match.inTeam = true;
+            match.inTeamType = "2 Trios";
         }
 
         let positions = 1;

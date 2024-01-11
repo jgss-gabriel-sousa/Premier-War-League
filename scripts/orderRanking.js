@@ -2,12 +2,17 @@ export function orderRanking(baseRanking) {
     const playerEntries = Object.entries(baseRanking);
 
     playerEntries.sort((a, b) => {
-
         if(a[1].pts){
+            
+            const pointsPercentageComparison = parseFloat(b[1].pointsPercentage) - parseFloat(a[1].pointsPercentage);
+            if (pointsPercentageComparison !== 0) {
+                return pointsPercentageComparison;
+            }
+            /*
             const pointsComparison = b[1].pts - a[1].pts;
             if (pointsComparison !== 0) {
                 return pointsComparison;
-            }
+            }*/
         }
         if(a[1].elo){
             const eloComparison = b[1].elo - a[1].elo;
@@ -15,6 +20,7 @@ export function orderRanking(baseRanking) {
                 return eloComparison;
             }
         }
+
 
         const victoriesComparison = b[1].victories - a[1].victories;
         if (victoriesComparison !== 0) {
@@ -28,9 +34,11 @@ export function orderRanking(baseRanking) {
             }
         }
 
-        const matchesComparison = b[1].matches - a[1].matches;
-        if (matchesComparison !== 0) {
-            return matchesComparison;
+        if(a[1].matches > 3 || b[1].matches > 3){
+            const matchesComparison = b[1].matches - a[1].matches;
+            if (matchesComparison !== 0) {
+                return matchesComparison;
+            }
         }
 
         return 0;
@@ -43,11 +51,10 @@ export function orderRanking(baseRanking) {
         const [player, details] = playerEntries[i];
 
         if (i > 0 && (
-            details.pts !== playerEntries[i - 1][1].pts ||
             details.elo !== playerEntries[i - 1][1].elo ||
+            details.pointsPercentage !== playerEntries[i - 1][1].pointsPercentage ||
             details.victories !== playerEntries[i - 1][1].victories ||
-            details.podiums !== playerEntries[i - 1][1].podiums ||
-            details.matches !== playerEntries[i - 1][1].matches
+            details.podiums !== playerEntries[i - 1][1].podiums
             )) {
             currentPosition = i + 1;
         }

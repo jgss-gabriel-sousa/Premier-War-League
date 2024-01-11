@@ -21,7 +21,7 @@ export function lastResults(){
         match.title = title;
 
         html += `
-        <button value="${i}">
+        <button value="${matches.length-i-1}">
             <h1>${title}</h1>
             <p>Vencedor: <b>${match.winner}</b></p>
         </button>

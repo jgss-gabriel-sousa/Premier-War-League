@@ -5,22 +5,6 @@ import { ranking } from "./ranking.js";
 
 let x1Ranking = {};
 
-function calcProb(eloA, eloB) {
-    return 1 / (1 + Math.pow(10, (eloB - eloA) / 400));
-}
-
-function updateElo(eloA, eloB, result){
-    const k = 64;
-  
-    const probA = calcProb(eloA, eloB);
-    const probB = 1 - probA;
-  
-    const newEloA = eloA + k * (result - probA);
-    const newEloB = eloB + k * ((1 - result) - probB);
-  
-    return [newEloA, newEloB];
-}
-
 export function processX1Ranking(){
     const x1Matches = [];
 
@@ -54,39 +38,17 @@ export function processX1Ranking(){
             };
         }
 
-        /*
-        x1Ranking[winner.player1].victories++;
-        x1Ranking[winner.player1].matches++;
-
-        x1Ranking[looser.player1].matches++;
-
-        const oldWinnerElo = x1Ranking[winner.player1].elo;
-        const oldLooserElo = x1Ranking[looser.player1].elo;
-
-        let eloWinner;
-        let eloLooser;
-
-        [eloWinner, eloLooser] = updateElo(oldWinnerElo, oldLooserElo, 1);
-
-        matches[match.id].ranking[0].eloPtsGain = Math.round(eloWinner - oldWinnerElo);
-        x1Ranking[winner.player1].elo = eloWinner;
-        
-        matches[match.id].ranking[1].eloPtsGain = Math.round(eloLooser - oldLooserElo);
-        x1Ranking[looser.player1].elo = eloLooser;*/
-
-
         x1Ranking[winner.player1].victories++;
         x1Ranking[winner.player1].matches++;
         const oldWinnerElo = x1Ranking[winner.player1].elo;
         const winnerEloGain = x1Ranking[looser.player1].elo/2;
         matches[match.id].ranking[0].eloPtsGain = winnerEloGain
         x1Ranking[winner.player1].elo += winnerEloGain;
-        
+
         x1Ranking[looser.player1].matches++;
         const looserEloLoss = -(x1Ranking[winner.player1].elo - oldWinnerElo);
         matches[match.id].ranking[1].eloPtsGain = looserEloLoss;
         x1Ranking[looser.player1].elo += looserEloLoss;
-
     });
     
     x1Ranking = orderRanking(x1Ranking);
