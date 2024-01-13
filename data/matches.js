@@ -122,6 +122,7 @@ export const matches = [
         img: "30-12-2023-x1-1",
         victory: "Dominar 24 Territórios",
         location: "Casa de Bilu",
+        x1: true,
         ranking: [
             {
                 player1: "Ravena",

@@ -1,6 +1,8 @@
 import { matches } from "../data/matches.js"
 
-export function processMatches(){
+export function processMatches(){    
+    let id = 0;
+
     matches.forEach(match => {
         const mRank = match.ranking;
         match.numberOfPlayers = match.ranking.length;
@@ -9,6 +11,8 @@ export function processMatches(){
         let parseDate = match.date.split("-");
         let date = new Date(parseDate[2], parseDate[1] - 1, parseDate[0]);
         match.timestamp = date.getTime();
+
+        match.id = id++;
         
         if(match.ranking.length == 2 && 
             match.ranking[0].player2 == undefined && 
@@ -58,4 +62,6 @@ export function processMatches(){
 
         match.ranking = mNewRank;
     });
+    
+    matches.sort((a,b) => b.timestamp - a.timestamp);
 }
