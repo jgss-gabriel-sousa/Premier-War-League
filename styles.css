@@ -138,7 +138,7 @@ tr:last-child {
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
+    overflow-y: overlay;
     align-items: stretch;
 }
 
