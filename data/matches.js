@@ -309,4 +309,31 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "13-01-2024",
+        img: "13-01-2024",
+        victory: "Dominar 18 Territórios com 2 Tropas em cada Território",
+        location: "Casa de Bilu",
+        ranking: [
+            {
+                player1: "Bruno",
+                color: "Pretas",
+                territories: 18,
+                troops: 41,
+                winner: true,
+            },
+            {
+                player1: "Coxinha",
+                color: "Vermelhas",
+                territories: 17,
+                troops: 37,
+            },
+            {
+                player1: "Bilu",
+                color: "Verdes",
+                territories: 7,
+                troops: 29,
+            },
+        ],
+    },
 ]
