@@ -7,7 +7,7 @@ export function lastResults(){
     const filter = document.querySelector("#change-table").innerText;
 
     let html = "<h1>Partidas:</h1><div>";
-    for (let i = 0; i < matches.length; i++) {
+    for (let i = matches.length-1; i >= 0; i--) {
         const match = matches[i];
 
         if(filter == "Tabela Padrão" && !match.x1)

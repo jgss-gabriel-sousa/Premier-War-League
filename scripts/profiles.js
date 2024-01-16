@@ -65,9 +65,24 @@ export function profiles(ranking){
                 </tr>
                 <tr>
                     <th>Cor mais usada</th>
+                    <th>Liderança</th>
                 </tr>
                 <tr>
-                    <td>${meanColor}</td>
+                    <td>${meanColor}</td>`
+                
+                if(player.leaderTime){
+                    if(player.isActualLeader){
+                        html += `<td>Lidera à ${player.leaderTime} dias</td>`;
+                    }
+                    else{
+                        html += `<td>Liderou por ${player.leaderTime} dias</td>`;
+                    }
+                }
+                else{
+                    html += "<td>Nunca Liderou</td>"
+                }
+
+                html += `
                 </tr>
             `; 
 

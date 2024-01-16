@@ -41,8 +41,9 @@ button{
     font-size: 16px;
 }
 button:hover{
-	background-color: grey;
+    background-color: #9b9b9b;
     cursor: pointer;
+    box-shadow: 0.5px 0.5px 5px;
 }
 
 a {
@@ -84,7 +85,7 @@ th {
 
 td {
     font-size: 22px;
-    padding: 10px;
+    padding: 8px 10px;
     text-align: center;
 }
 td:first-child, th:first-child {
@@ -171,7 +172,10 @@ tr:last-child {
 }
 
 #player-stats th {
-    border: .1rem solid #333;
+    border-bottom: .1rem solid #333;
+}
+#player-stats td {
+    border: 1px solid #777;
 }
 .profile-photo {
     max-width: 200px;

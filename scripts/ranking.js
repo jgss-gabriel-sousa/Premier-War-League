@@ -123,9 +123,20 @@ export function ranking(){
         rankingHistory.push({
             rank: JSON.parse(JSON.stringify(ranking)),
             time: match.timestamp,
+            matchID: match.id,
         });
 
-        //eloFunc(match);
+        const lastRanking = rankingHistory[rankingHistory.length-1];
+
+        if(match.id > 2){
+            for(const p in lastRanking.rank){
+                const player = lastRanking.rank[p];
+
+                if(player.matches < 3){
+                    delete lastRanking.rank[p];
+                }
+            }
+        }
     });
 
     for(const p in ranking) {
@@ -139,20 +150,47 @@ export function ranking(){
         }
     }
 
-    let newRank = "";
+    const leader = {};
+    let lastTime;
+    let lastLeader;
     for(const r in rankingHistory) {
         const rank = rankingHistory[r].rank;
 
+        if(lastTime == null) lastTime = rankingHistory[r].time;
+
         orderRanking(rank);
 
-        for(const k in rank){
-            newRank += `${k}: ${Math.round(rank[k].pointsPercentage)}\n`
+        for(const p in rank){
+            const player = rank[p];
+
+            if(player.position == 1){
+                if(!leader[p]){
+                    leader[p] = rankingHistory[r].time - lastTime;
+                }
+                else{
+                    leader[p] += rankingHistory[r].time - lastTime;
+                }
+
+                if(p != lastLeader && lastLeader != null){
+                    leader[lastLeader] += rankingHistory[r].time - lastTime;
+                    leader[p] -= rankingHistory[r].time - lastTime;
+                }
+
+                lastLeader = p;
+            }
         }
         
-        newRank += "##################\n";
+        lastTime = rankingHistory[r].time;
     }
+    leader[lastLeader] += (Date.now() - lastTime);
 
-    console.log(newRank)
+    for(const p in leader) {
+        ranking[p].leaderTime = Math.round(leader[p] / (1000 * 3600 * 24));
+        
+        if(lastLeader == p){
+            ranking[p].isActualLeader = true;
+        }
+    }
 
     return ranking;
 }

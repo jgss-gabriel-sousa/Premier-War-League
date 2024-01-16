@@ -3,7 +3,7 @@ import { matches } from "../data/matches.js"
 export function processMatches(){    
     let id = 0;
 
-    matches.reverse().forEach(match => {
+    matches.forEach(match => {
         const mRank = match.ranking;
         match.numberOfPlayers = match.ranking.length;
         const mNewRank = [];
@@ -58,12 +58,8 @@ export function processMatches(){
             mNewRank.push(p);
         }
 
-        mNewRank.sort((a,b) => b.positions - a.positions);
-
         match.ranking = mNewRank;
     });
-
-    console.log(matches)
     
-    matches.sort((a,b) => b.timestamp - a.timestamp);
+    console.log(matches)
 }
