@@ -27,7 +27,7 @@ export function processMatches(){
             match.inTeam = true;
             match.inTeamType = "2 Duplas";
         }
-        else if(match.ranking.length == 3 && !match.ranking[0].player2 && !match.ranking[0].player3 && match.ranking[1].player3){
+        else if(match.ranking.length == 3 && match.ranking[0].player2 && match.ranking[1].player2 && match.ranking[2].player2 && !match.ranking[0].player3 && !match.ranking[1].player3 && !match.ranking[2].player3){
             match.numberOfPlayers = 6;
             match.inTeam = true;
             match.inTeamType = "3 Duplas";
