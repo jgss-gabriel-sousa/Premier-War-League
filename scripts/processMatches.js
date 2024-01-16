@@ -3,7 +3,7 @@ import { matches } from "../data/matches.js"
 export function processMatches(){    
     let id = 0;
 
-    matches.forEach(match => {
+    matches.reverse().forEach(match => {
         const mRank = match.ranking;
         match.numberOfPlayers = match.ranking.length;
         const mNewRank = [];

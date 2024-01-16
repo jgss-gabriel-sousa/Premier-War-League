@@ -20,7 +20,7 @@ export function ranking(){
         colorsHistory: [],
     };
 
-    matches.reverse().forEach(match => {
+    matches.forEach(match => {
         if(match.x1)
             return;
 
