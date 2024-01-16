@@ -98,6 +98,7 @@ th {
     border-bottom: .1rem solid #333;
 }
 tr {
+    border: 1px solid #333;
     border-bottom: .1rem solid #ebe5eb;
 }
 #main-table tr:nth-child(n+2):hover {

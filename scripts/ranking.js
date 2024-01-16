@@ -5,6 +5,7 @@ import { profiles } from "./profiles.js";
 
 export function ranking(){
     let ranking = {};
+    let rankingHistory = [];
     
     const basePlayer = {
         name: "",
@@ -108,7 +109,7 @@ export function ranking(){
                 }
             }
 
-            if(match.ranking[i].position <= 3 && !match.inTeam){
+            if(match.ranking[i].position <= 3 && !match.inTeam && match.ranking.length >= 3){
                 ranking[p.player1].podiums++;
 
                 if(playersInTeam == 2) ranking[p.player2].podiums++;
@@ -118,6 +119,11 @@ export function ranking(){
                 }
             }
         }
+
+        rankingHistory.push({
+            rank: JSON.parse(JSON.stringify(ranking)),
+            time: match.timestamp,
+        });
 
         //eloFunc(match);
     });
@@ -132,6 +138,21 @@ export function ranking(){
             player.pointsPercentage = parseFloat(player.pointsPercentage).toFixed(0)+"%";
         }
     }
+
+    let newRank = "";
+    for(const r in rankingHistory) {
+        const rank = rankingHistory[r].rank;
+
+        orderRanking(rank);
+
+        for(const k in rank){
+            newRank += `${k}: ${Math.round(rank[k].pointsPercentage)}\n`
+        }
+        
+        newRank += "##################\n";
+    }
+
+    console.log(newRank)
 
     return ranking;
 }
