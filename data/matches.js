@@ -337,4 +337,37 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "19-01-2024",
+        img: "19-01-2024",
+        victory: "",
+        location: "Casa de Bilu",
+        ranking: [
+            {
+                player1: "Coxinha",
+                color: "Vermelhas",
+                territories: 8,
+                troops: 26,
+                winner: true,
+            },
+            {
+                player1: "Bruno",
+                color: "Pretas",
+                territories: 21,
+                troops: 66,
+            },
+            {
+                player1: "Bilu",
+                color: "Verdes",
+                territories: 7,
+                troops: 50,
+            },
+            {
+                player1: "Ravena",
+                color: "Brancas",
+                territories: 0,
+                troops: 0,
+            },
+        ],
+    },
 ]
