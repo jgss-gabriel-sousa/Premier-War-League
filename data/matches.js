@@ -340,7 +340,7 @@ export const matches = [
     {
         date: "19-01-2024",
         img: "19-01-2024",
-        victory: "",
+        victory: "Destruir totalmente os Exércitos Brancos",
         location: "Casa de Bilu",
         ranking: [
             {
