@@ -120,7 +120,7 @@ function events(){
                             
                         html += `
                             <td>${e.territories}</td>
-                            <td>${e.troops}</td>
+                            <td>${Math.round(e.troops)}</td>
                         </tr>
                         `;
                     }
