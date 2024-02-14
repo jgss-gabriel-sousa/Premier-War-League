@@ -31,9 +31,6 @@ export function pointsFunc(position, totalOfPlayers, playersInTeam, inTeamType){
 
         return points[position];
     }
-    if(playersInTeam > 1){
-        return Math.max((Math.floor(points[position] / playersInTeam)), 1);
-    }
 
     return points[position];
 }
