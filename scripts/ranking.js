@@ -196,7 +196,7 @@ export function ranking(){
 }
 
 export function drawRanking(finalRanking){
-    const table = document.querySelector("#main-table");
+    const table = document.querySelector("#main-table > table");
 
     let html = `
     <tr>

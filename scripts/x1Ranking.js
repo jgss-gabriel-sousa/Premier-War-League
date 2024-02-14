@@ -55,7 +55,7 @@ export function processX1Ranking(){
 }
 
 export function drawX1Ranking(){
-    const table = document.querySelector("#main-table");
+    const table = document.querySelector("#main-table > table");
 
     let html = `
     <tr>
