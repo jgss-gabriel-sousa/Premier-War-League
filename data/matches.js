@@ -460,4 +460,43 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "16-03-2024",
+        img: "16-03-2024",
+        victory: "Dominar Ásia e África",
+        location: "Casa do Pai de Aninha",
+        ranking: [
+            {
+                player1: "Bilu",
+                color: "Verdes",
+                territories: 26,
+                troops: 42,
+                winner: true,
+            },
+            {
+                player1: "Aninha",
+                color: "Brancas",
+                territories: 8,
+                troops: 13,
+            },
+            {
+                player1: "Ravena",
+                color: "Azuis",
+                territories: 7,
+                troops: 13,
+            },
+            {
+                player1: "Divinha",
+                color: "Amarelas",
+                territories: 1,
+                troops: 4,
+            },
+            {
+                player1: "Coxinha",
+                color: "Pretas",
+                territories: 0,
+                troops: 0,
+            },
+        ],
+    },
 ]
