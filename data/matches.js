@@ -506,7 +506,7 @@ export const matches = [
         location: "Casa do Pai de Aninha",
         ranking: [
             {
-                player1: "Coxas",
+                player1: "Coxinha",
                 color: "Vermelhas",
                 territories: 17,
                 troops: 30,
