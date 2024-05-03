@@ -499,4 +499,49 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "26-04-2024",
+        img: "26-04-2024",
+        victory: "Dominar Europa, América do Sul e mais um à sua escolha",
+        location: "Casa do Pai de Aninha",
+        ranking: [
+            {
+                player1: "Coxas",
+                color: "Vermelhas",
+                territories: 17,
+                troops: 30,
+                winner: true,
+            },
+            {
+                player1: "Bilu",
+                color: "Verdes",
+                territories: 11,
+                troops: 32,
+            },
+            {
+                player1: "Bruno",
+                color: "Pretas",
+                territories: 6,
+                troops: 27,
+            },
+            {
+                player1: "Ravena",
+                color: "Amarelas",
+                territories: 5,
+                troops: 14,
+            },
+            {
+                player1: "Aninha",
+                color: "Brancas",
+                territories: 3,
+                troops: 6,
+            },
+            {
+                player1: "Divinha",
+                color: "Azuis",
+                territories: 0,
+                troops: 0,
+            },
+        ],
+    },
 ]
