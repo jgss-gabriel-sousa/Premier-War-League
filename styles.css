@@ -104,7 +104,6 @@ tr {
 }
 #main-table {
     overflow-y: overlay;
-    overflow-x: hidden;
     height: 68vh;
 }
 #main-table > table tr:nth-child(n+2):hover {
@@ -136,6 +135,7 @@ tr:last-child {
 
 #results {
     height: 60vh;
+    margin-left: 1em;
 }
 #results h1 {
     margin: 0;
@@ -199,7 +199,8 @@ tr:last-child {
         align-items: center;
     }
     #main-table {
-        width: 85%
+        width: 85%;
+        height: auto;
     }
     #main-table > table {
         padding: 0;
@@ -211,6 +212,7 @@ tr:last-child {
     #results {
         margin-top: 1em;
         margin-bottom: 5em;
+        margin-left: 0;
     }
     #match-result td, #match-result th {
         font-size: 14px;
