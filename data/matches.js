@@ -544,4 +544,29 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "22-06-2024",
+        img: "22-06-2024",
+        victory: "Dominar 30 Territórios",
+        location: "Casa de Divinha",
+        ranking: [
+            {
+                player1: "Bruno",
+                player2: "Luiz",
+                player3: "Itonga",
+                color: "Vermelhas-Brancas-Pretas",
+                territories: 30,
+                troops: 45,
+                winner: true,
+            },
+            {
+                player1: "Aninha",
+                player2: "Iasmin",
+                player3: "Ravena",
+                color: "Verdes-Amarelas-Azuis",
+                territories: 12,
+                troops: 22,
+            },
+        ],
+    },
 ]
