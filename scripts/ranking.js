@@ -3,6 +3,8 @@ import { orderRanking } from "./orderRanking.js";
 import { eloFunc, eloUpdate, pointsFunc, pointsRank } from "./pointsFunc.js";
 import { profiles } from "./profiles.js";
 
+const BANNED_PLAYER = ["Renally"]
+
 export function ranking(){
     let ranking = {};
     let rankingHistory = [];
@@ -36,11 +38,11 @@ export function ranking(){
             if(p.hasOwnProperty("player2")) playersInTeam = 2;
             if(p.hasOwnProperty("player3")) playersInTeam = 3;
 
-            if(!ranking.hasOwnProperty(p.player1)){
+            if(!ranking.hasOwnProperty(p.player1) && !BANNED_PLAYER.includes(p.player1)){
                 ranking[p.player1] = JSON.parse(JSON.stringify(basePlayer));
                 ranking[p.player1].name = p.player1;
             }
-            if(playersInTeam == 2 && !ranking.hasOwnProperty(p.player2)){
+            if(playersInTeam == 2 && !ranking.hasOwnProperty(p.player2) && !BANNED_PLAYER.includes(p.player1)){
                 if(!ranking.hasOwnProperty(p.player1)){
                     ranking[p.player1] = JSON.parse(JSON.stringify(basePlayer));
                     ranking[p.player1].name = p.player1;
@@ -62,6 +64,8 @@ export function ranking(){
             }
 
             function processPlayer(player, playerID) {
+                if(!player) return;
+
                 player.pts += pointsFunc(match.ranking[i].position, nmbrOfPlayers, playersInTeam, inTeamType);
                 player.max_pts += pointsFunc(1, nmbrOfPlayers, playersInTeam, inTeamType);
                 player.pointsPercentage = (player.pts / player.max_pts) * 100;
