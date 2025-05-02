@@ -4,7 +4,7 @@ export function processMatches(){
     let id = 0;
 
     matches.forEach(match => {
-        const mRank = match.ranking;
+        const matchRank = match.ranking;
         match.numberOfPlayers = match.ranking.length;
         const mNewRank = [];
         
@@ -39,8 +39,8 @@ export function processMatches(){
         }
 
         let positions = 1;
-        for(let i = 0; i < mRank.length; i++){
-            const p = mRank[i];
+        for(let i = 0; i < matchRank.length; i++){
+            const p = matchRank[i];
 
             if(!p.winner)
                 p.winner = false;
@@ -49,7 +49,7 @@ export function processMatches(){
                 match.winner = p.player1 + (p.player2 != undefined ? " - "+p.player2 : "") + (p.player3 != undefined ? " - "+p.player3 : "");;
             }
 
-            if(i != 0 && p.territories == mRank[i-1].territories && p.troops == mRank[i-1].troops){
+            if(i != 0 && p.territories == matchRank[i-1].territories && p.troops == matchRank[i-1].troops){
                 positions--;
             }
 
