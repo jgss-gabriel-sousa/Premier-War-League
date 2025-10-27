@@ -71,12 +71,7 @@ export function profiles(ranking){
                     <td>${meanColor}</td>`
                 
                 if(player.leaderTime){
-                    if(player.isActualLeader){
-                        html += `<td>Lidera à ${player.leaderTime} dias</td>`;
-                    }
-                    else{
-                        html += `<td>Liderou por ${player.leaderTime} dias</td>`;
-                    }
+                    html += `<td>${player.leaderTime} dia${player.leaderTime > 1 ? "s" : ""}</td>`;
                 }
                 else{
                     html += "<td>Nunca Liderou</td>"

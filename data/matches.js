@@ -589,7 +589,7 @@ export const matches = [
                 troops: 28,
             },
             {
-                player1: "Giovana",
+                player1: "Giovanna",
                 color: "Brancas",
                 territories: 9,
                 troops: 19,

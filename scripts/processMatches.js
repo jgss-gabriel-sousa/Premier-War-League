@@ -61,5 +61,5 @@ export function processMatches(){
         match.ranking = mNewRank;
     });
     
-    console.log(matches)
+    //console.log(matches)
 }
