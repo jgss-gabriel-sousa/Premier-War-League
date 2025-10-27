@@ -570,8 +570,8 @@ export const matches = [
         ],
     },
     {
-        date: "27-10-2025",
-        img: "27-10-2025",
+        date: "26-10-2025",
+        img: "26-10-2025",
         victory: "Dominar 15 Territórios",
         location: "Casa de Bilu",
         ranking: [
