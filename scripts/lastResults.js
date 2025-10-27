@@ -11,7 +11,7 @@ export function lastResults(){
         const match = matches[i];
 
         if(filter == "Tabela Padrão" && !match.x1)
-        continue;
+            continue;
         if(filter == "Tabela de X1" && match.x1)
             continue;
 
@@ -28,7 +28,7 @@ export function lastResults(){
 
         html += `
         <button value="${match.id}">
-            <h1>${title}</h1>
+            <h2>${title}</h2>
             <p>Vencedor: <b>${match.winner}</b></p>
         </button>
         `;

@@ -36,7 +36,7 @@ button{
 	border-radius: 5px;
 	background-color: lightgrey;
 	padding: 10px;
-	margin: 5px;
+	margin: 0.5em 1em;
 	transition: background-color 0.25s;
     font-size: 16px;
 }
@@ -140,6 +140,13 @@ tr:last-child {
 #results h1 {
     margin: 0;
     text-align: center;
+    margin-bottom: 0.25em;
+}
+#results h2 {
+    margin: 0.2em;
+    text-align: center;
+    margin-bottom: 0.25em;
+    color: #37003c;
 }
 #results div {
     height: 100%;

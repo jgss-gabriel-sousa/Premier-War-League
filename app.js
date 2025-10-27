@@ -19,6 +19,7 @@ drawRanking(finalRanking);
 processLeaderTime();
 processX1Ranking();
 
+/*
 const changeTable = document.querySelector("#change-table");
 changeTable.addEventListener("click", e => {
     if(changeTable.innerText == "Tabela de X1"){
@@ -31,7 +32,7 @@ changeTable.addEventListener("click", e => {
     }
 
     lastResults();
-});
+});*/
 
 document.querySelector("#help-points").addEventListener("click", e => {
     let html = `
