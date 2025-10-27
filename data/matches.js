@@ -569,4 +569,49 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "27-10-2025",
+        img: "27-10-2025",
+        victory: "Dominar 15 Territórios",
+        location: "Casa de Bilu",
+        ranking: [
+            {
+                player1: "Coxinha",
+                color: "Pretas",
+                territories: 15,
+                troops: 37,
+                winner: true,
+            },
+            {
+                player1: "Myllena",
+                color: "Verdes",
+                territories: 9,
+                troops: 28,
+            },
+            {
+                player1: "Giovana",
+                color: "Brancas",
+                territories: 9,
+                troops: 19,
+            },
+            {
+                player1: "Bilu",
+                color: "Vermelhas",
+                territories: 7,
+                troops: 20,
+            },
+            {
+                player1: "Ravena",
+                color: "Azuis",
+                territories: 2,
+                troops: 2,
+            },
+            {
+                player1: "Itonga",
+                color: "Amarelas",
+                territories: 0,
+                troops: 0,
+            },
+        ],
+    },
 ]
