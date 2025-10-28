@@ -205,7 +205,7 @@ export function drawRanking(finalRanking){
     let html = `
     <tr>
         <th>Pos</th>
-        <th>Jogador</th>
+        <th colspan="2">Jogador</th>
         <th>Apr</th>
         <th>Vitórias</th>
         <th>Pódios</th>
@@ -227,6 +227,7 @@ export function drawRanking(finalRanking){
         
         html += `
             ${e.position}º</td>
+            <td><img class="ranking-profile-photo" src="./data/img/players/${e.name}.webp"/></td>
             <td>${e.name}</td>
             <td>${e.pointsPercentage == 0 ? "*" : e.pointsPercentage}</td>
             <td>${e.victories}</td>

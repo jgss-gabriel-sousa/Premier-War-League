@@ -61,7 +61,7 @@ h2 {
 }
 
 p {
-    font-size: 14px;
+    font-size: 16px;
     margin: 10px 0;
 }
 
@@ -71,7 +71,6 @@ table {
     font-family: Coolvetica;
     color: #37003c;
     background-color: #fff;
-    border: 1px solid #333;
     border-collapse: collapse;
 }
 
@@ -80,7 +79,6 @@ th {
     background-color: #fbfafa;
     font-size: 16px;
     border-bottom: .1rem solid #ebe5eb;
-    border-top: 1px solid #333;
 }
 
 td {
@@ -88,18 +86,14 @@ td {
     padding: 8px 10px;
     text-align: center;
 }
-td:first-child, th:first-child {
-    border-left: 1px solid #333;
-}
-td:last-child, th:last-child {
-    border-right: 1px solid #333;
-}
 
 th {
-    border-bottom: .1rem solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-collapse: collapse;
 }
 tr {
-    border: 1px solid #333;
     border-bottom: .1rem solid #ebe5eb;
 }
 #main-table {
@@ -159,6 +153,9 @@ tr:last-child {
 #main-table {
     width: 50%;
 }
+#main-table td:nth-child(2) {
+    width: 0;
+}
 #main-table > table td:nth-child(3) {
     font-weight: bold;
     letter-spacing: 2px;
@@ -184,15 +181,28 @@ tr:last-child {
 }
 
 #player-stats th {
-    border-bottom: .1rem solid #333;
+    background-color: #37003c22;
+    border: 1px solid #9999;
+    font-size: 20px;
+    letter-spacing: 1px;
 }
 #player-stats td {
-    border: 1px solid #777;
+    border: 1px solid #9999;
 }
 .profile-photo {
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 40vw;
+    max-height: 40vh;
+    border-radius: 5%;
     margin-bottom: 10px;
+}
+.ranking-profile-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    filter: contrast(1.05) drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.2));
+    transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .profile-container {
@@ -228,7 +238,8 @@ tr:last-child {
     background: rgba(0,0,0,0.4);
     color: white;
     border: none;
-    font-size: 24px;
+    font-size: 64px;
+    margin: 0;
     padding: 5px 10px;
     cursor: pointer;
     border-radius: 8px;

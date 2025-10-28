@@ -36,13 +36,13 @@ changeTable.addEventListener("click", e => {
 
 document.querySelector("#help-points").addEventListener("click", e => {
     let html = `
-        <p>A pontuação principal do ranking é composta pelo Aproveitamento somado de todas as partidas Solos e em Grupos (exclui-se os X1).</p>
-        <p>PO = Pontos Obtidos</p>
-        <p>PMax = Pontos Máximos combinados das partidas que o jogador jogou</p>
-        <h4>Aproveitamento = (PO / PMax) * 100%</h4>
-        <p>Utiliza-se um arredondamento no resultado, logo, em caso de empate, os critérios de desempate são, Vitórias e Pódios, nesta ordem.</p>
+        <p>A pontuação do ranking é determinada pelo <strong>Aproveitamento</strong> total do jogador em todas as partidas disputadas.</p>
+        <p><strong>PO</strong> = Pontos Obtidos<br>
+        <p><strong>PMax</strong> = Pontos Máximos possíveis nas partidas jogadas</p>
+        <h4>Aproveitamento = (PO / PMax) × 100%</h4>
+        <p>O resultado é arredondado. Em caso de empate, os critérios de desempate são aplicados na seguinte ordem: <strong>Vitórias</strong> e depois <strong>Pódios</strong>.</p>
         <br>
-        <p>Novos jogadores no ranking tendem a ficar com resultados bem injustos, para evitar isso, sua posição definitiva no ranking só é obtida após o resultado de pelo menos 3 partidas.</p>
+        <p>Jogadores novos podem ter resultados distorcidos no início. Para garantir justiça, a posição definitiva no ranking só é calculada após a participação em pelo menos <strong>3 partidas</strong>.</p>
     `
 
     Swal.fire({
