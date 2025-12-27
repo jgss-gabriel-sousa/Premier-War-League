@@ -614,4 +614,41 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "27-12-2025",
+        img: "27-12-2025",
+        victory: "Dominar 24 Territórios",
+        location: "Casa de Bilu",
+        ranking: [
+            {
+                player1: "Bilu",
+                player2: "Bruno",
+                color: "Vermelhas",
+                territories: 24,
+                troops: 43,
+                winner: true,
+            },
+            {
+                player1: "Divinha",
+                player2: "Itonga",
+                color: "Verdes",
+                territories: 9,
+                troops: 10,
+            },
+            {
+                player1: "Lívia",
+                player2: "Ravena",
+                color: "Amarelas",
+                territories: 5,
+                troops: 10,
+            },
+            {
+                player1: "Aninha",
+                player2: "Coxinha",
+                color: "Pretas",
+                territories: 3,
+                troops: 6,
+            },
+        ],
+    },
 ]
