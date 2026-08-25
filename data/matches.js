@@ -651,4 +651,37 @@ export const matches = [
             },
         ],
     },
+    {
+        date: "21-08-2026",
+        img: "21-08-2026",
+        victory: "W.O.",
+        location: "Casa de Lívia",
+        ranking: [
+            {
+                player1: "Mateus",
+                color: "Amarelas",
+                territories: 20,
+                troops: 49,
+                winner: true,
+            },
+            {
+                player1: "Lívia",
+                color: "Verdes",
+                territories: 10,
+                troops: 29,
+            },
+            {
+                player1: "Bilu",
+                color: "Azuis",
+                territories: 9,
+                troops: 21,
+            },
+            {
+                player1: "Ravena",
+                color: "Vermelhas",
+                territories: 4,
+                troops: 17,
+            },
+        ],
+    },
 ]
