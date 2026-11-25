@@ -2,29 +2,59 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="stylesheet" href="styles.css"/>
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <meta name="description" content="Ranking oficial, estatísticas, evolução e histórico de partidas da Premier War League.">
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <script src="app.js" type="module"></script>
 
-    <script src="app.js" type="module" defer></script>
-    
     <title>Premier War League</title>
 </head>
 <body>
-    <section id="top">
-        <h1>Premier War League</h1>
-    </section>
-    <section>
-        <button id="help-points">Explicação da Pontuação</button>
-        <button id="change-table" style="display: none;">Tabela de X1</button>
-    </section>
-    <section id="main">
-        <div id="main-table"><table></table></div>
-        <div id="results"></div>
-    </section>
+    <header class="site-header" id="top">
+        <div class="header-inner">
+            <div class="brand">
+                <h1>Premier War League</h1>
+                <p class="subtitle" id="league-summary">Classificação oficial &amp; histórico de partidas</p>
+            </div>
+            <div class="header-controls" role="toolbar" aria-label="Controles do ranking">
+                <label class="season-select-wrap">
+                    <span class="sr-only">Filtrar por temporada</span>
+                    <select id="season-filter" aria-label="Filtrar por temporada">
+                        <option value="all">Todas as Temporadas</option>
+                    </select>
+                </label>
+
+                <button type="button" id="help-points" class="btn-outline">Pontuação</button>
+            </div>
+        </div>
+    </header>
+
+    <main id="main" class="layout-container">
+        <div class="primary-column">
+            <section class="card" aria-labelledby="ranking-heading">
+                <div class="panel-header">
+                    <h2 id="ranking-heading">Classificação Geral</h2>
+                    <span id="ranking-hint" class="hint-text">Clique em um jogador para ver o perfil</span>
+                </div>
+                <div id="main-table" class="table-scroll">
+                    <table></table>
+                </div>
+            </section>
+
+            <section id="evolution-section" class="card" aria-labelledby="evolution-heading">
+                <div class="panel-header">
+                    <h2 id="evolution-heading">Evolução do Aproveitamento</h2>
+                    <span class="hint-text">Passe o mouse nos pontos para detalhes</span>
+                </div>
+                <div id="evolution-chart"></div>
+            </section>
+        </div>
+
+        <aside id="results" class="card matches-panel" aria-label="Histórico de partidas"></aside>
+    </main>
+
+    <dialog id="app-modal" class="app-modal"></dialog>
 </body>
 </html>

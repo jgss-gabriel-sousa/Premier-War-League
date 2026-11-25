@@ -1,65 +1,116 @@
-import { matches } from "../data/matches.js"
+import { matches as rawMatches } from "../data/matches.js";
+import { BANNED_PLAYERS } from "../data/players.js";
 
-export function processMatches(){    
-    let id = 0;
+function parseIsoDate(dateStr) {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    const date = new Date(year, month - 1, day);
+    return {
+        timestamp: date.getTime(),
+        season: String(year),
+        displayDate: `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`,
+    };
+}
 
-    matches.forEach(match => {
-        const matchRank = match.ranking;
-        match.numberOfPlayers = match.ranking.length;
-        const mNewRank = [];
-        
-        let parseDate = match.date.split("-");
-        let date = new Date(parseDate[2], parseDate[1] - 1, parseDate[0]);
-        match.timestamp = date.getTime();
+function detectTeamConfig(rankingEntries) {
+    const teamSizes = rankingEntries.map(entry => entry.players.length);
+    const allPairs = teamSizes.every(size => size === 2);
+    const allTrios = teamSizes.every(size => size === 3);
 
-        match.id = id++;
-        
-        if(match.ranking.length == 2 && 
-            match.ranking[0].player2 == undefined && 
-            match.ranking[1].player2 == undefined){ //X1
-            match.x1 = true;
-        }
-        if(match.ranking.length == 2 && 
-            match.ranking[0].player2 && !match.ranking[0].player3 && 
-            match.ranking[1].player2 && !match.ranking[1].player3){
+    if (allPairs && rankingEntries.length >= 2 && rankingEntries.length <= 4) {
+        return {
+            inTeam: true,
+            inTeamType: `${rankingEntries.length} Duplas`,
+            numberOfPlayers: rankingEntries.length * 2,
+        };
+    }
 
-            match.numberOfPlayers = 4;
-            match.inTeam = true;
-            match.inTeamType = "2 Duplas";
-        }
-        else if(match.ranking.length == 3 && match.ranking[0].player2 && match.ranking[1].player2 && match.ranking[2].player2 && !match.ranking[0].player3 && !match.ranking[1].player3 && !match.ranking[2].player3){
-            match.numberOfPlayers = 6;
-            match.inTeam = true;
-            match.inTeamType = "3 Duplas";
-        }
-        else if(match.ranking.length == 2 && match.ranking[0].player3 && match.ranking[1].player3){
-            match.numberOfPlayers = 6;
-            match.inTeam = true;
-            match.inTeamType = "2 Trios";
-        }
+    if (allTrios && rankingEntries.length === 2) {
+        return {
+            inTeam: true,
+            inTeamType: "2 Trios",
+            numberOfPlayers: 6,
+        };
+    }
 
-        let positions = 1;
-        for(let i = 0; i < matchRank.length; i++){
-            const p = matchRank[i];
+    return {
+        inTeam: false,
+        inTeamType: null,
+        numberOfPlayers: rankingEntries.length,
+    };
+}
 
-            if(!p.winner)
-                p.winner = false;
-            else{
-                p.position = 1;
-                match.winner = p.player1 + (p.player2 != undefined ? " - "+p.player2 : "") + (p.player3 != undefined ? " - "+p.player3 : "");;
-            }
+function isTie(current, previous) {
+    if (current.winner || previous.winner) return false;
+    if (current.eliminationOrder !== undefined || previous.eliminationOrder !== undefined) {
+        return current.eliminationOrder === previous.eliminationOrder;
+    }
+    return current.territories === previous.territories && current.troops === previous.troops;
+}
 
-            if(i != 0 && p.territories == matchRank[i-1].territories && p.troops == matchRank[i-1].troops){
-                positions--;
-            }
-
-            p.position = positions++;
-
-            mNewRank.push(p);
-        }
-
-        match.ranking = mNewRank;
+/**
+ * Processa a lista de partidas de forma pura (sem mutar o array original).
+ * @param {Array} sourceMatches
+ * @returns {Array}
+ */
+export function processMatches(sourceMatches = rawMatches) {
+    const withTimestamps = sourceMatches.map((match, originalIndex) => {
+        const { timestamp, season, displayDate } = parseIsoDate(match.date);
+        return { match, originalIndex, timestamp, season, displayDate };
     });
-    
-    //console.log(matches)
+
+    // Garante ordem cronológica estável (mantendo a ordem original para partidas no mesmo dia)
+    withTimestamps.sort((a, b) => a.timestamp - b.timestamp || a.originalIndex - b.originalIndex);
+
+    return withTimestamps.map(({ match, timestamp, season, displayDate }, id) => {
+        const teamConfig = detectTeamConfig(match.ranking);
+
+        let winnerLabel = "";
+        let nextPosition = 1;
+
+        const ranking = match.ranking.map((entry, index) => {
+            let position;
+            if (index === 0) {
+                position = 1;
+            } else if (isTie(entry, match.ranking[index - 1])) {
+                position = nextPosition - 1;
+            } else {
+                position = index + 1;
+            }
+            nextPosition = position + 1;
+
+            const isWinner = Boolean(entry.winner);
+            if (isWinner) {
+                winnerLabel = entry.players
+                    .filter(p => !BANNED_PLAYERS.includes(p.name))
+                    .map(p => p.name)
+                    .join(" & ");
+            }
+
+            return {
+                ...entry,
+                players: entry.players.map(p => ({ ...p })),
+                winner: isWinner,
+                position,
+            };
+        });
+
+        const title = `${match.location} (${displayDate})`;
+
+        return {
+            id,
+            date: match.date,
+            displayDate,
+            season,
+            timestamp,
+            img: match.img ?? null,
+            victory: match.victory,
+            location: match.location,
+            inTeam: teamConfig.inTeam,
+            inTeamType: teamConfig.inTeamType,
+            numberOfPlayers: teamConfig.numberOfPlayers,
+            winner: winnerLabel,
+            title,
+            ranking,
+        };
+    });
 }

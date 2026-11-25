@@ -1,141 +1,293 @@
-export function profiles(ranking){
-    const players = document.querySelectorAll("table tr:nth-child(n+2)");
-    players.forEach(el => {
-        el.addEventListener("click", e => {
-            const name = el.id;
-            const player = ranking[name];
+import { getFallbackAvatarDataUri, getPlayerPhotos } from "../data/players.js";
+import { escapeHtml, openModal, renderArmyColorBadge, renderFormBadges } from "./ui.js";
 
-            let meanPosition = 0;
-            for(let i = 0; i < player.positionsHistory.length; i++) {
-                meanPosition += player.positionsHistory[i];
-            }
-            meanPosition /= player.matches;
-            meanPosition = meanPosition.toFixed(1);
-            
-            let meanColorObj = {};
-            for(let i = 0; i < player.colorsHistory.length; i++) {
-                const color = player.colorsHistory[i];
+function computeFavoriteColor(colorsHistory) {
+    if (!colorsHistory || colorsHistory.length === 0) return { colors: [], count: 0 };
 
-                if(meanColorObj.hasOwnProperty(color)){
-                    meanColorObj[color] = meanColorObj[color]+1;
-                }
-                else{
-                    meanColorObj[color] = 1;
-                }
-            }
-            let meanColor;
-            let meanColorMax = 0;
-            let draw = 0;
-            for(const c in meanColorObj) {
-                if(meanColorObj[c] > meanColorMax){
-                    meanColorMax = meanColorObj[c];
-                    meanColor = c;
-                    draw = 0;
-                }
-                else if(meanColorObj[c] == meanColorMax){
-                    meanColor += "/"+c;
-                    draw++;
-                }
+    const counts = {};
+    for (const color of colorsHistory) {
+        counts[color] = (counts[color] ?? 0) + 1;
+    }
 
-                if(draw > 2){
-                    meanColor = "*";
-                }
-            }
-            if(draw <= 2){
-                meanColor += " ("+meanColorMax+"x)";
-            }
+    let max = 0;
+    let topColors = [];
+    for (const [color, count] of Object.entries(counts)) {
+        if (count > max) {
+            max = count;
+            topColors = [color];
+        } else if (count === max) {
+            topColors.push(color);
+        }
+    }
 
-            const extraImages = [];
-            for (let i = 1; i <= 3; i++) {
-                const path = `./data/img/players/${name}_${i}.webp`;
-                const img = new Image();
-                img.src = path;
-                img.onload = () => extraImages.push(path);
-            }
+    return { colors: topColors, count: max };
+}
 
-            setTimeout(() => { // Espera o preload terminar
-                let html = `<div class="profile-container">`;
+function getTopTeammate(teammates) {
+    const entries = Object.entries(teammates ?? {});
+    if (entries.length === 0) return null;
+    entries.sort((a, b) => b[1] - a[1]);
+    return { name: entries[0][0], count: entries[0][1] };
+}
 
-                // Se houver imagens extras, cria o carrossel
-                if (extraImages.length > 0) {
-                    html += `
-                    <div class="carousel">
-                        <div class="carousel-track">
-                            <img src="./data/img/players/${name}.webp" class="carousel-item active">
-                            ${extraImages.map(path => `<img src="${path}" class="carousel-item">`).join("")}
-                        </div>
-                        <button class="carousel-btn prev">‹</button>
-                        <button class="carousel-btn next">›</button>
-                    </div>`;
-                } 
-                // Caso contrário, mostra apenas a imagem fixa
-                else {
-                    html += `<img class="profile-photo" src="./data/img/players/${name}.webp"/>`;
-                }
+function renderHeadToHead(headToHead) {
+    const rows = Object.entries(headToHead ?? {})
+        .map(([opponent, stats]) => ({
+            opponent,
+            ...stats,
+            total: stats.wins + stats.losses + stats.ties,
+        }))
+        .sort((a, b) => b.total - a.total || b.wins - a.wins)
+        .slice(0, 6);
 
-                html += `
-                    <table id="player-stats">
+    if (rows.length === 0) return "";
+
+    return `
+        <section class="profile-section">
+            <h3>Confronto Direto (Top Rivais)</h3>
+            <div class="table-scroll">
+                <table class="mini-table">
+                    <thead>
                         <tr>
-                            <th>Pontos</th>
-                            <th>Posição Final Média</th>
+                            <th>Adversário</th>
+                            <th>À frente</th>
+                            <th>Atrás</th>
+                            <th>Empates</th>
+                            <th>Saldo</th>
                         </tr>
-                        <tr>
-                            <td>${player.pts} de ${player.max_pts} = ${Math.round((player.pts/player.max_pts)*100)}%</td>
-                            <td>${meanPosition}º</td>
-                        </tr>
-                        <tr>
-                            <th>Vitórias</th>
-                            <th>Pódios</th>
-                        </tr>
-                        <tr>
-                            <td>${Math.round((player.victories / player.matches)*100)}%</td>
-                            <td>${Math.round((player.podiums / player.matches)*100)}%</td>
-                        </tr>
-                        <tr>
-                            <th>Cor mais usada</th>
-                            <th>Liderança</th>
-                        </tr>
-                        <tr>
-                            <td>${meanColor}</td>
-                            ${player.leaderTime 
-                                ? `<td>${player.leaderTime} dia${player.leaderTime > 1 ? "s" : ""}</td>` 
-                                : "<td>Nunca Liderou</td>"}
-                        </tr>
-                    </table>
-                </div>`;
+                    </thead>
+                    <tbody>
+                        ${rows
+                            .map(r => {
+                                const diff = r.wins - r.losses;
+                                const diffLabel = diff > 0 ? `+${diff}` : `${diff}`;
+                                const diffClass = diff > 0 ? "stat-pos" : diff < 0 ? "stat-neg" : "muted";
+                                return `
+                                    <tr>
+                                        <td><strong>${escapeHtml(r.opponent)}</strong></td>
+                                        <td>${r.wins}</td>
+                                        <td>${r.losses}</td>
+                                        <td>${r.ties}</td>
+                                        <td class="${diffClass}">${diffLabel}</td>
+                                    </tr>
+                                `;
+                            })
+                            .join("")}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    `;
+}
 
-                Swal.fire({
-                    title: name,
-                    html,
-                    width: "800px",
-                    showCloseButton: true,
-                    showCancelButton: false,
-                    showConfirmButton: false,
+function renderMatchHistory(matchLog) {
+    if (!matchLog || matchLog.length === 0) return "";
+
+    const reversed = [...matchLog].reverse();
+    return `
+        <section class="profile-section">
+            <h3>Histórico de Partidas (${reversed.length})</h3>
+            <div class="table-scroll">
+                <table class="mini-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Pos</th>
+                            <th>Cor</th>
+                            <th>Pts</th>
+                            <th>Territ.</th>
+                            <th>Tropas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${reversed
+                            .map(
+                                m => `
+                                <tr class="clickable-row" data-open-match="${m.matchId}" tabindex="0" role="button">
+                                    <td>${escapeHtml(m.date)}</td>
+                                    <td><strong>${m.position}º</strong></td>
+                                    <td>${renderArmyColorBadge(m.color)}</td>
+                                    <td>${m.points}/${m.maxPoints}</td>
+                                    <td>${m.territories}</td>
+                                    <td>${m.troops}</td>
+                                </tr>
+                            `
+                            )
+                            .join("")}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    `;
+}
+
+/**
+ * Abre o modal de perfil detalhado de um jogador.
+ * @param {object} player
+ * @param {{ onOpenMatch?: (matchId: number) => void }} callbacks
+ */
+export function openPlayerProfile(player, { onOpenMatch } = {}) {
+    if (!player) return;
+
+    const meanPosition =
+        player.matches > 0
+            ? (player.positionsHistory.reduce((acc, p) => acc + p, 0) / player.matches).toFixed(1)
+            : "—";
+
+    const winRate = player.matches > 0 ? Math.round((player.victories / player.matches) * 100) : 0;
+    const podiumRate = player.matches > 0 ? Math.round((player.podiums / player.matches) * 100) : 0;
+    const avgTerritories = player.matches > 0 ? (player.totalTerritories / player.matches).toFixed(1) : "0";
+    const avgTroops = player.matches > 0 ? (player.totalTroops / player.matches).toFixed(1) : "0";
+
+    const favColor = computeFavoriteColor(player.colorsHistory);
+    const favColorHtml =
+        favColor.colors.length === 0
+            ? "—"
+            : favColor.colors.length > 2
+              ? `Variadas (${favColor.count}x)`
+              : `${favColor.colors.map(renderArmyColorBadge).join(" ")} <span class="muted">(${favColor.count}x)</span>`;
+
+    const leaderHtml = player.leaderTime
+        ? `${player.leaderTime} dia${player.leaderTime > 1 ? "s" : ""}${
+              player.isActualLeader ? ' <span class="leader-pill">Líder atual</span>' : ""
+          }`
+        : "Nunca liderou";
+
+    const topTeammate = getTopTeammate(player.teammates);
+
+    const photos = getPlayerPhotos(player.name);
+    const fallbackAvatar = getFallbackAvatarDataUri(player.name);
+
+    let mediaHtml;
+    if (photos.length > 1) {
+        mediaHtml = `
+            <div class="carousel" aria-label="Fotos de ${escapeHtml(player.name)}">
+                <div class="carousel-track">
+                    ${photos
+                        .map(
+                            (src, idx) =>
+                                `<img src="${escapeHtml(src)}" alt="Foto ${idx + 1} de ${escapeHtml(player.name)}" class="carousel-item" loading="lazy">`
+                        )
+                        .join("")}
+                </div>
+                <button type="button" class="carousel-btn prev" aria-label="Foto anterior">&#8249;</button>
+                <button type="button" class="carousel-btn next" aria-label="Próxima foto">&#8250;</button>
+                <div class="carousel-dots" aria-hidden="true">
+                    ${photos.map((_, idx) => `<span class="carousel-dot ${idx === 0 ? "is-active" : ""}"></span>`).join("")}
+                </div>
+            </div>
+        `;
+    } else {
+        const singleSrc = photos[0] ?? fallbackAvatar;
+        mediaHtml = `<img class="profile-photo" src="${escapeHtml(singleSrc)}" alt="Foto de ${escapeHtml(player.name)}" loading="lazy">`;
+    }
+
+    const bodyHtml = `
+        <div class="profile-container">
+            <div class="profile-hero">
+                ${mediaHtml}
+                <div class="profile-summary">
+                    <div class="profile-badges">
+                        <span class="pill pill-purple">${player.position}º no Ranking</span>
+                        ${
+                            player.qualified
+                                ? `<span class="pill pill-accent">${player.roundedPercentage}% de aproveitamento</span>`
+                                : `<span class="pill pill-muted">Em qualificação (${player.matches}/3 partidas)</span>`
+                        }
+                    </div>
+                    <div class="profile-form-row">
+                        <span class="muted">Forma recente:</span>
+                        ${renderFormBadges(player.recentForm)}
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Pontos Obtidos</span>
+                    <strong class="stat-value">${player.pts} / ${player.maxPts}</strong>
+                    <span class="stat-sub">${player.roundedPercentage}% aproveitamento</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Posição Média</span>
+                    <strong class="stat-value">${meanPosition}º</strong>
+                    <span class="stat-sub">em ${player.matches} partida${player.matches !== 1 ? "s" : ""}</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Vitórias</span>
+                    <strong class="stat-value">${player.victories} (${winRate}%)</strong>
+                    <span class="stat-sub">Melhor sequência: ${player.bestWinStreak}</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Pódios</span>
+                    <strong class="stat-value">${player.podiums} (${podiumRate}%)</strong>
+                    <span class="stat-sub">Partidas solo com 3+ jogadores</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Cor mais usada</span>
+                    <div class="stat-value stat-value--sm">${favColorHtml}</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Tempo na Liderança</span>
+                    <strong class="stat-value stat-value--sm">${leaderHtml}</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Média por Partida</span>
+                    <strong class="stat-value stat-value--sm">${avgTerritories} territ. • ${avgTroops} tropas</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Parceiro Frequente</span>
+                    <strong class="stat-value stat-value--sm">${
+                        topTeammate ? `${escapeHtml(topTeammate.name)} (${topTeammate.count}x)` : "—"
+                    }</strong>
+                </div>
+            </div>
+
+            ${renderHeadToHead(player.headToHead)}
+            ${renderMatchHistory(player.matchLog)}
+        </div>
+    `;
+
+    openModal({
+        title: player.name,
+        bodyHtml,
+        size: "lg",
+        onRender: dialog => {
+            if (photos.length > 1) {
+                const track = dialog.querySelector(".carousel-track");
+                const dots = dialog.querySelectorAll(".carousel-dot");
+                const nextBtn = dialog.querySelector(".carousel-btn.next");
+                const prevBtn = dialog.querySelector(".carousel-btn.prev");
+                let index = 0;
+
+                const update = () => {
+                    track.style.transform = `translateX(-${index * 100}%)`;
+                    dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+                };
+
+                nextBtn.addEventListener("click", () => {
+                    index = (index + 1) % photos.length;
+                    update();
                 });
 
-                // Só ativa o carrossel se houver imagens extras
-                if (extraImages.length > 0) {
-                    const track = document.querySelector(".carousel-track");
-                    const items = document.querySelectorAll(".carousel-item");
-                    const next = document.querySelector(".carousel-btn.next");
-                    const prev = document.querySelector(".carousel-btn.prev");
+                prevBtn.addEventListener("click", () => {
+                    index = (index - 1 + photos.length) % photos.length;
+                    update();
+                });
+            }
 
-                    let index = 0;
-                    function updateCarousel() {
-                        track.style.transform = `translateX(-${index * 100}%)`;
-                    }
-
-                    next.addEventListener("click", () => {
-                        index = (index + 1) % items.length;
-                        updateCarousel();
+            if (typeof onOpenMatch === "function") {
+                dialog.querySelectorAll("[data-open-match]").forEach(row => {
+                    const trigger = () => onOpenMatch(Number(row.dataset.openMatch));
+                    row.addEventListener("click", trigger);
+                    row.addEventListener("keydown", e => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            trigger();
+                        }
                     });
-
-                    prev.addEventListener("click", () => {
-                        index = (index - 1 + items.length) % items.length;
-                        updateCarousel();
-                    });
-                }
-            }, 200);
-        });
+                });
+            }
+        },
     });
 }
